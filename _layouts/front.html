@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+  {% include head.html %}
+
+  <style>
+  	.parent {
+	    position: relative;
+	    overflow: hidden;
+	    height:100vh;
+	    width:none;
+	    background-color: #e2b98d;
+        text-align: center;
+    	font-family: Palatino, serif;
+    	font-weight: bold;
+		text-shadow: 1px 0 0 #CCC, 0 -1px 0 #CCC, 0 1px 0 #CCC, -1px 0 0 #CCC;
+	    color:#720F10;
+	}
+
+	.child {
+	    position: absolute;
+	    top: -9999px;
+	    bottom: -9999px;
+	    left: -9999px;
+	    right: -9999px;
+	    margin: auto;
+	    height: 100vh;
+	    max-width: none;
+	}
+	
+
+	@keyframes iot_is_coming {
+    	from {
+    		font-size: 0px;
+    	}
+    	50%, 60%, to {
+    		font-size: 100px;
+		}
+		
+	}
+	@keyframes are_you_ready {
+    	0%, 50% {
+    		font-size: 0px;
+    	}
+    	60%, to {
+    		font-size: 100px;
+		}
+	}
+
+
+	.iot_is_coming {
+	}
+	</style>
+  <body >
+
+
+	  <div class=parent>
+	  	<img src=/img/horses.jpg class=child>
+	  	<div style="
+	        position: absolute;
+			left: 0;
+            top: 0;
+            width: 100%;
+	    	">
+		    <div class=wrapper style="
+				font-size: 40px;
+				text-align: left;
+		    	">
+		    	aQute
+		    </div>
+	  	</div>
+	  	<div style="
+	        position: absolute;
+			left: 0;
+            top: 0;
+            width: 100%;
+	    	">
+		    <div class=wrapper style="
+				font-size: 40px;
+				text-align: right;
+		    	">
+		    	<img src=/img/menu.png style="
+		    		width:40px;
+		    	">
+		    </div>
+	  	</div>
+	    <div class=iot_is_coming style="
+	        position: absolute;
+			left: 0;
+            top: 40%;
+            width: 100%;
+			font-size: 0px;
+			animation-name: iot_is_coming;
+	        animation-iteration-count:infinite;
+			animation-duration: 8s;
+	    	">
+	    	IoT is Coming ...
+	    </div>
+	    <div class=iot_is_coming style="
+	        position: absolute;
+			left: 0;
+            top: 60%;
+            width: 100%;
+	    	font-size: 0px;
+			animation-name: are_you_ready;
+    	    animation-iteration-count:infinite;
+			animation-duration: 8s;
+	    	">
+	    	Are You Ready?
+	    </div>
+	  </div>
+	  
+    <div class="page-content">
+      <div class="wrapper">
+        {{ content }}
+      </div>
+    </div>
+
+    {% include footer.html %}
+
+  </body>
+
+</html>
