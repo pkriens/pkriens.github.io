@@ -167,8 +167,30 @@
  * Page content
  */
 .page-content {
+	box-sizing: border-box;
     padding: $spacing-unit 0;
     min-height: 500px;
+    display: inline-block;
+}
+
+.page-news {
+    display: none;
+    
+}
+
+@include media-query($on-laptop) {
+	.page-news {
+		box-sizing: border-box;
+	    padding: $spacing-unit 0;
+	    padding-left: $gutter;
+	    min-height: 500px;
+	    display: inline-block;
+	    vertical-align: top;
+		width: 30%;
+	}
+	.page-content {
+		width: 70%;
+	}	
 }
 
 .page-heading {
