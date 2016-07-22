@@ -8,16 +8,17 @@
 // Our variables
 
 $base-font-family: Verdana, Sans-serif;
-$base-font-size:   12px;
+$base-font-size:   0.9em;
 $base-font-weight: 400;
 $small-font-size:  $base-font-size * 0.875;
-$base-line-height: 1.5;
+$base-line-height: 1.3;
 
-$spacing-unit:     12px;
+$spacing-unit:     2em;
 
 $text-color:       #111;
-$background-color: #fdfdfd;
-$brand-color:      #720F10;
+$background-color: white;
+
+$brand-color:      #720F10; 
 
 $grey-color:       #828282;
 $grey-color-light: lighten($grey-color, 40%);
@@ -54,9 +55,46 @@ $on-laptop:        800px;
 ;
 
 h1, h2, h3 {
-	color:#720F10;
+	color: $brand-color;
 	font-family: Trebuchet MS, Verdana, sans;
 	font-weight: bold;
 }
 
 
+.dropdown {
+    position: relative;
+    display: block;
+}
+
+.dropdown-content {
+    display: none;
+    position: relative;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    padding: 12px 16px;
+    z-index: 1;
+    border-radius: 10px;
+    text-align:left;
+    right: 0px;
+	div {
+		padding:4px;
+		&:hover {
+			background-color: $brand-color;
+			color:white;
+		}
+	}
+}
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.shout {
+	font-family: Palatino, serif;
+	font-weight: bold;
+	text-shadow: 1px 0 0 #CCC, 0 -1px 0 #CCC, 0 1px 0 #CCC, -1px 0 0 #CCC;
+}
+
+img.thumb {
+	max-width:80px;
+}

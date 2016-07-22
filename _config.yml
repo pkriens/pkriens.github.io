@@ -27,3 +27,4 @@ exclude:
   - 'run.sh'
   - '.travis.yml'
   - '/vendor'
+permalink: /404.html

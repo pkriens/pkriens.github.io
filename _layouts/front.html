@@ -5,16 +5,12 @@
 
   <style>
   	.parent {
-	    position: relative;
+	    position: absolute;
 	    overflow: hidden;
 	    height:100vh;
-	    width:none;
+	    width:100vw;
 	    background-color: #e2b98d;
         text-align: center;
-    	font-family: Palatino, serif;
-    	font-weight: bold;
-		text-shadow: 1px 0 0 #CCC, 0 -1px 0 #CCC, 0 1px 0 #CCC, -1px 0 0 #CCC;
-	    color:#720F10;
 	}
 
 	.child {
@@ -56,35 +52,8 @@
 
 	  <div class=parent>
 	  	<img src=/img/horses.jpg class=child>
-	  	<div style="
-	        position: absolute;
-			left: 0;
-            top: 0;
-            width: 100%;
-	    	">
-		    <div class=wrapper style="
-				font-size: 40px;
-				text-align: left;
-		    	">
-		    	aQute
-		    </div>
-	  	</div>
-	  	<div style="
-	        position: absolute;
-			left: 0;
-            top: 0;
-            width: 100%;
-	    	">
-		    <div class=wrapper style="
-				font-size: 40px;
-				text-align: right;
-		    	">
-		    	<img src=/img/menu.png style="
-		    		width:40px;
-		    	">
-		    </div>
-	  	</div>
-	    <div class=iot_is_coming style="
+	    <div class="iot_is_coming shout" style="
+			color:#720F10;
 	        position: absolute;
 			left: 0;
             top: 40%;
@@ -96,7 +65,8 @@
 	    	">
 	    	IoT is Coming ...
 	    </div>
-	    <div class=iot_is_coming style="
+	    <div class="iot_is_coming shout" style="
+			color:#720F10;
 	        position: absolute;
 			left: 0;
             top: 60%;
@@ -110,6 +80,8 @@
 	    </div>
 	  </div>
 	  
+    {% include header.html %}
+
     <div class="page-content">
       <div class="wrapper">
         {{ content }}
