@@ -14,10 +14,7 @@ business model. Once jet engines could be connected to their management systems 
 from selling these engines to  flying hours. From a business model with a one time revenue when the 
 product is sold to a recurring revenue.
 
-## The Unknowns
-
-
-## Assi
+## Assistance
 aQute provides a wide palette of services for manufacturers that consider connecting
 products to the Internet. A wild west place, moving at warp speed, under constant attack, that clearly contains
 many pitfalls. aQute can be a partner in the product development team that provides
