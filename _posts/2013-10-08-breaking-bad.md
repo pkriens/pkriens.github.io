@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Breaking Bad
-description: In my quest to get OSGi and JPA working together purely through services I ran head on to an API that breaking my code badly: java(x).sql. After making things work on Java 6 ...
+description: "In my quest to get OSGi and JPA working together purely through services I ran head on to an API that breaking my code badly: java(x).sql. After making things work on Java 6 ..."
 comments: true
 ---
 
