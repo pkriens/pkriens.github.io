@@ -9,7 +9,7 @@
 
 $base-font-family: Verdana, Sans-serif;
 $base-font-size:   0.9em;
-$base-font-weight: 400;
+$base-font-weight: 300;
 $small-font-size:  $base-font-size * 0.875;
 $base-line-height: 1.3;
 
@@ -31,6 +31,9 @@ $on-palm:          600px;
 $on-laptop:        800px;
 
 
+body {
+	min-width: 500px;
+}
 
 // Use media queries like this:
 // @include media-query($on-palm) {
@@ -53,12 +56,16 @@ $on-laptop:        800px;
         "syntax-highlighting"
 ;
 
-h1, h2, h3 {
+h1, h2, h3, .title {
 	color: $brand-color;
 	font-family: Trebuchet MS, Verdana, sans;
 	font-weight: bold;
 }
 
+.title {
+	font-size: 40px;
+	
+}
 
 .dropdown {
     position: relative;

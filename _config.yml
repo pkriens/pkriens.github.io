@@ -10,7 +10,7 @@ title: aQute
 email: info@aQute.biz
 description: > # this means to ignore newlines until "baseurl:"
   aQute is specialized in providing pragmatic expertise, services, 
-  and products related to the Internet of Things with a special focus on OSGi. 
+  and products related to OSGi. 
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://aQute.biz" # the base hostname & protocol for your site
 twitter_username: pkriens
