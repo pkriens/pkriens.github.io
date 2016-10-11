@@ -1,8 +1,12 @@
 ---
 title: Semantic Logging
-layout: default
-description: A different way of logging
+layout: post
+description: Semantic logging is promoted by Microsoft to add structure to logs. Let's see how we can add semantic logging to Java. 
+comments: true
 ---
+
+## Semantic Logging
+
 Recently a customer asked me about _semantic logging_. This is a concept
 promoted by Microsoft. It is a concept promoted by Microsoft to put more
 structure in logging. Generally, people log by creating an unstructured
@@ -56,4 +60,8 @@ automatically:
 	[main] INFO DeviceCatalog - comparing sensor=room temperature=54 maxTemperature=23
 	[main] ERROR DeviceCatalog - fire sensor=room location="Floor 4,\toffice 45\n"
 
+
+## Links
+
+You can find the software on [https://github.com/aQute-os/biz.aQute/biz.aQute.semantic-logging](https://github.com/aQute-os/biz.aQute/tree/master/biz.aQute.semantic-logging)
 

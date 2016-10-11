@@ -2,7 +2,6 @@
 <html>
 
   {% include head.html %}
-
   <body>
 
     {% include header.html %}
@@ -12,13 +11,8 @@
 		 <div class="page-content">
 			  {{ content }}
 		</div><div class="page-news">
-		<h2>News and Blogs</h2>
-		{% for page in site.posts limit:5 %}
-		    <div class="item" onclick="location.href='{{page.url}}'">
-		      <h3>{{page.title}}</h3>
-		      <p>{{page.description}}</p>  
-		    </div>
-		{% endfor %}
+		<a class="twitter-timeline" data-width="300" data-height="1000" href="https://twitter.com/pkriens">Tweets by pkriens</a> 
+		<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
       </div>
     </div>
     
@@ -26,5 +20,20 @@
     {% include footer.html %}
 
   </body>
+
+<script>
+(function() {
+    var pre = document.getElementsByTagName('pre'),
+        pl = pre.length;
+    for (var i = 0; i < pl; i++) {
+        pre[i].innerHTML = '<span class="line-number"></span>' + pre[i].innerHTML + '<span class="cl"></span>';
+        var num = pre[i].innerHTML.split(/\n/).length;
+        for (var j = 0; j < num-1; j++) {
+            var line_num = pre[i].getElementsByTagName('span')[0];
+            line_num.innerHTML += '<span>' + (j + 1) + '</span>';
+        }
+    }
+})();
+</script>
 
 </html>

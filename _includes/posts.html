@@ -1,7 +1,0 @@
-<h2>News and Blogs</h2>
-{% for page in site.posts limit:5 %}
-    <div class="item" onclick="location.href='{{page.url}}'">
-      <h3>{{page.title}}</h3>
-      <p>{{page.description}}</p>  
-    </div>
-{% endfor %}

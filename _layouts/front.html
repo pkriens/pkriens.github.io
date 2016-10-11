@@ -18,24 +18,19 @@ hr {
 		<div>
 			<hr>
 			<div style='position: relative'>
-				<div style='position: absolute; top: 50px; right: 0px; z-index: 3'>
+				<img src=/img/portrait.jpg style='max-height: 200px;style='float:right''>
+				<div style='position: absolute; top: 50px; right: 0px'>
 					<div class=title>
 						OSGi & Java<br /> Expertise
 					</div>
 				</div>
-				<img src=/img/portrait.jpg style='max-height: 300px;style='float:right''>
 			</div>
 			<hr>
 		</div>
 		<div style="clear: both"></div>
 		<div class=page-content>{{ content }}</div><div class="page-news">
-		<h2>News and Blogs</h2>
-		{% for page in site.posts limit:5 %}
-		    <div class="item" onclick="location.href='{{page.url}}'">
-		      <h3>{{page.title}}</h3>
-		      <p>{{page.description}}</p>  
-		    </div>
-		{% endfor %}
+		<a class="twitter-timeline" data-width="300" data-height="1000" href="https://twitter.com/pkriens">Tweets by pkriens</a> 
+		<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
       </div>
 	</div>
 

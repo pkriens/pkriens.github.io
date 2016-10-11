@@ -119,11 +119,11 @@ h1, h2, h3, h4, h5, h6 {
  * Links
  */
 a {
-    color: blue;
+    color: $link-color;
 	text-decoration: none;
 
     &:visited {
-        color: darken(blue, 15%);
+        color: darken( $link-color, 15%);
     }
 
     &:hover {
@@ -157,10 +157,12 @@ blockquote {
  */
 pre,
 code {
-    font-size: 15px;
+    font-size: 12px;
+   font-family: monospace;
     border: 1px solid $grey-color-light;
     border-radius: 3px;
-    background-color: #eef;
+    background-color: #fff4ee;
+    
 }
 
 code {
@@ -176,9 +178,30 @@ pre {
         padding-right: 0;
         padding-left: 0;
     }
+    &:before {
+        float:left;
+        padding: 0px;
+        margin: 0px;
+        text-align: left;
+    }
 }
 
+pre .line-number {
+  float:left;
+  margin:0 1em 0 -1em;
+  border-right:1px solid;
+  text-align:right;
+}
 
+pre .line-number span {
+  display:block;
+  padding:0 .5em 0 1em;
+}
+
+pre .cl {
+  display:block;
+  clear:both;
+}
 
 /**
  * Wrapper
@@ -240,4 +263,8 @@ section {
 	margin: 8px;
 	border-radius: 10px;
 	border-color: $brand-color;
+}
+
+a {
+	color: $link-color;
 }

@@ -31,7 +31,12 @@ Therefore, if you consider using OSGi, then I am sure we can make the difference
 
 <div style="margin-top:10px;text-align:right;margin:30px"><a href="mailto:Peter.Kriens@aQute.biz?subject=Information">Peter Kriens</a></div>
 
-[Contact details]
+
+* [Contact details]
+* [Services]
+* [About aQute]
+* [About OSGi]
+* [Articles]
 
 [Smalltalk]: https://en.wikipedia.org/wiki/Smalltalk
 [OO]: https://en.wikipedia.org/wiki/Object-oriented_programming
@@ -40,5 +45,8 @@ Therefore, if you consider using OSGi, then I am sure we can make the difference
 [OSGi enRoute]: http://enroute.osgi.org
 [bnd]: http://bnd.bndtools.org
 [OSGi Alliance]: http://osgi.org
-[services]: services
+[Services]: services
 [Contact details]: contact
+[About aQute]: aqute
+[About OSGi]: osgi
+[Articles]: posts

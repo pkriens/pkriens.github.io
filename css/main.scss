@@ -7,7 +7,7 @@
 
 // Our variables
 
-$base-font-family: Verdana, Sans-serif;
+$base-font-family: Trebuchet MS, Verdana, Sans-serif;
 $base-font-size:   0.9em;
 $base-font-weight: 300;
 $small-font-size:  $base-font-size * 0.875;
@@ -19,6 +19,7 @@ $text-color:       #111;
 $background-color: white;
 
 $brand-color:      #720F10; 
+$link-color:       $brand-color; 
 
 $grey-color:       #828282;
 $grey-color-light: lighten($grey-color, 40%);
@@ -67,6 +68,11 @@ h1, h2, h3, .title {
 	
 }
 
+.item {
+	font-size: smaller;
+	border-bottom: 1px solid gray;
+	margin-bottom: $gutter;
+}
 .dropdown {
     position: relative;
     display: block;
