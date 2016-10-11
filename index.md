@@ -31,7 +31,6 @@ Therefore, if you consider using OSGi, then I am sure we can make the difference
 
 <div style="margin-top:10px;text-align:right;margin:30px"><a href="mailto:Peter.Kriens@aQute.biz?subject=Information">Peter Kriens</a></div>
 
-
 * [Contact details]
 * [Services]
 * [About aQute]
