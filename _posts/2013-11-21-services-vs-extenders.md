@@ -5,6 +5,8 @@ description: In the OSGi community there are two patterns that are widely used, 
 comments: true
 ---
 
+# OSGi Services versus Extenders
+
 In the OSGi community there are two patterns that are widely used, but looking at a recent Stackoverflow question, not so widely understood. So an attempt to elucidate.
 
 The best metaphor I can find for bundles, services, and extenders is our day to day society. In a society with interact with others to achieve our goals. In this interaction we often play a role in a scenario. For example, in a commercial transaction we have the seller and a buyer role and the contract that governs the transaction is the scenario. In the OSGi µservice model, a µservice is one of the actors in the scenario described by the service package. The µservice model is eminently suitable for this role playing since, unlike other service models, is based from the ground up to be dynamic, just like the real world. For example, the existence of a Bluetooth service is not a means to interact with any Bluetooth devices, nope, each Bluetooth service signals that there is a Bluetooth device available in the area and provides the means to talk to that device. It is hard to overestimate the value of this tool. Though there is a place for registering your service in the Bundle's activator, OSGi becomes really powerful when you make this registration dynamic, fully taking dependencies into account, which is trivial to do with Declarative Services. Services are therefore a powerful a domain design tool that solves untold ordering, boilerplate, and concurrency problems.

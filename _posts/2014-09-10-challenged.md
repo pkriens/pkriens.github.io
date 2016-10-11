@@ -5,6 +5,8 @@ title:  Challenged
 description: In my last whiny post I stated that we tend to solve the symptoms and not the root problem, Jaco Joubert challenged me to define what the real ...
 ---
 
+# Challenges
+
 In my last whiny post I stated that we tend to solve the symptoms and not the root problem, Jaco Joubert challenged me to define what the real problem is; fair enough.
 
 The root problem is that we write fragile software that stumbles when there are unexpected changes in the environment. The simplest solution to this problem is to lash down the environment. If the environment does not move, then our software will not fall over. This is exactly what Docker does. And if a software system consisted of a single delivery then the cheapest solution is likely the best solution. 

@@ -5,6 +5,8 @@ description: I am currently writing an RFP for the increasing adoption work I wi
 comments: true
 ---
 
+# Accidental Complexity
+
 I am currently writing an RFP for the increasing adoption work I will do for the OSGi Alliance. To understand the landscape, I interviewed a number of software companies. The first interview was a Spring/Maven shop, representing mainstream Java development. However, I've seen that PHP is very  popular in the lower segments of the web applications. Since I am a strong believer in the powers of Java, I always wondered why those people 'struggled' with PHP so I decided to interview a small PHP shop to find out why they used PHP.
 
 The story they told me over lunch was quite interesting. Early 2000 they had some people go on a course at IBM to learn about Java EE. After many thousands of dollars and some weeks later they all had become utterly confused. In their eyes, Java was just way too complicated for what they wanted to do. PHP gave them a simple platform that was more than sufficient for their needs. And not only was it much easier to learn, it was also much easier to find libraries and snippets that they could use in their daily work.

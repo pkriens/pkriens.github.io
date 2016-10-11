@@ -4,6 +4,7 @@ title: Baselining, Semantic Versioning Made Easy
 description: Versioning is one of those things where everybody has a general idea but few really understand it well, resulting in many different and sometimes bizarre practices. The semantic versioning movement put a more solid footing on the version syntax, creating a version Domain Specific Language (DSL) to ...
 comments: true
 ---
+# Baselining, Semantic Versioning Made Easy
 
 Versioning is one of those things where everybody has a general idea but few really understand it well, resulting in many different and sometimes bizarre practices. The semantic versioning movement put a more solid footing on the version syntax, creating a version Domain Specific Language (DSL) to signal backward compatibility. It uses a 3-part version, where the first part (MAJOR) signals the breaking changes, the second part (MINOR) signals backward compatible changes, and the third part (MICRO/PATCH) signal bug fixes not visible in the public API. For example, an artifact with version 1.2.3 has the same API as 1.2.4, will be backward compatible with 1.3.0, and will break with 2.0.0. By using semantic versioning you pledge that in the future you will use this DSL to signal backward compatibility so that tools can point out breakage or select compatible components. Semantic versions are a big step in software engineering.
 

@@ -5,6 +5,8 @@ title: How should I use Blueprint?
 description: "Someone asked me over mail how to use Guice (or any other injector) inside my bundle? The short answer is: don't. The slightly ..."
 ---
 
+# Blueprint
+
 Someone asked me over mail:
 
 > How should I use Guice (or any other injector) inside my bundle?

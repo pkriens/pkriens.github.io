@@ -5,6 +5,8 @@ description: OSGi was derived from Sun's Java Embedded Server, a product that ha
 comments: true
 ---
 
+# Why has OSGi a dynamic model?
+
 OSGi was derived from Sun's Java Embedded Server, a product that had dynamics at its heart. It consisted of a dynamic µservice model with updatable modules. So why did we adopt this, seemingly complex, model? Well, we could, and at the time were heavily frustrated with Windows 98 that seemed to require a reboot for every third mouse move. So it seemed utterly stupid to build a static system that required a reboot to update a module or a configuration.   
 
 What I had not realized at the time is what a powerful software primitive the µservice model actually was.  Once you accept that a service can come and go you need to make it easy to handle this. So we did with Declarative Services (DS). Once you have a primitive that models dynamic behavior you start to see how dynamic the real world actually is. You also notice that highly complex middleware is build to shield the application developer from the facts of life because they are not deemed clever enough to handle dynamics.

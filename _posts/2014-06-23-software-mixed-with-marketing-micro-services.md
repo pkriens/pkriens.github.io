@@ -5,6 +5,8 @@ description: A few months ago I was on the phone when the speaker on the other s
 comments: true
 ---
 
+# Software mixed with marketing: micro-services
+
 A few months ago I was on the phone when the speaker on the other side mentioned micro-services. Many moons ago I'd written a blog about OSGi's µservices because people were getting confused with the term service. Though this name was unique enough in 1998, the advent of Service Oriented Architectures (SOA) had imprinted people to think about heavy weight, costly, and complex things requiring stacks and other things a developer wants to avoid. That is, everything OSGi is not. I even used the Mu symbol (µ) because it was also the symbol for friction, of which µservices have so little. I therefore kind of naturally assumed the guy was talking about our wonderful in-VM µservice oriented architecture (µsoa). Actually, I smugly told him that I coined the term, trying to impress him. This however turned the discussion from straightforward discussion about technologies into a rather confusing one, that is, until I realized that they had stolen our name again!
 
 Looking at the discussions it seems that micro-services talk like a web-service, they walk like a web-service (that is, they don't walk, they are actually kind of static), and they quack like a web-service.  Ergo?

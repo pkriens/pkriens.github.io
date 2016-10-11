@@ -5,6 +5,8 @@ description: After having such good experiences with Mongodb last year it is a t
 comments: true
 ---
 
+# The Perfect OSGi Persistence Model?
+
 After having such good experiences with Mongodb last year it is a tad frustrating to have to dive into the messy and fuzzy Java persistence world. Ok, I did miss the transactions in Mongodb a lot but for the rest it was a dream. However, there are good cases to be made for relational databases, not in the least because of their popularity and therefore widespread support. What I found so far is that virtually no implementations are as easy to use as the OSGi specifications imply. I've now got a working configuration that works but is a far cry from the pick and choose model that OSGi promises. I've created a small blog application that consist of a Web based GUI and a Blog Manager service. The Blog Manager service is then implemented in multiple ways:
 
 * Dummy database

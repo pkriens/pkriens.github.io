@@ -5,6 +5,8 @@ description: The more (open) source code I see the more I realize that so many d
 comments: true
 ---
 
+# Dear Prudence
+
 > Dear Prudence,
 
 > I've some doubts related to osgi I am new to OSGI framework. I was going 

@@ -5,7 +5,7 @@ description: Semantic logging is promoted by Microsoft to add structure to logs.
 comments: true
 ---
 
-## Semantic Logging
+# Semantic Logging
 
 Recently a customer asked me about _semantic logging_. This is a concept
 promoted by Microsoft. It is a concept promoted by Microsoft to put more

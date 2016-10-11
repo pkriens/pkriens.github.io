@@ -5,6 +5,8 @@ title: Taking Exception
 description: Did you ever look at how we as developers are handling our exceptions? Open source lets us see that we've developed an intriguing number of ways of handling ...
 ---
 
+# Taking Exception 
+
 Did you ever look at how we as developers are handling our exceptions? Open source lets us see that we've developed an intriguing number of ways of handling exceptions. Let's take a look at the myriad ways developers handle their exceptions.
 
 First the closeted C developer that was forced to use Java.

@@ -5,6 +5,8 @@ description: Entering the enterprise world from an embedded background feels a b
 comments: true
 ---
 
+# The Transaction Composability Problem
+
 Entering the enterprise world from an embedded background feels a bit like Alice 
 must have felt when she entered Wonderland. Sometimes you feel very big, other 
 times you feel awfully small. Worse, you often do not know your relative size in 

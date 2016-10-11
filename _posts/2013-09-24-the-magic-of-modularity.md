@@ -5,6 +5,8 @@ description: Anybody that has done some computer classes over the last 30 years 
 comments: true
 ---
 
+# The Magic of Modularity
+
 Anybody that has done some computer classes over the last 30 years has learned about
 modularity and should know it is good. However, to describe why it is good is always 
 a bit harder. Maybe it is not that hard to understand the benefits of encapsulation 
