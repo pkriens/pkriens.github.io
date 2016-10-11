@@ -35,6 +35,7 @@ Therefore, if you consider using OSGi, then I am sure we can make the difference
 * [Services]
 * [About aQute]
 * [About OSGi]
+* [Customers]
 * [Articles]
 
 [Smalltalk]: https://en.wikipedia.org/wiki/Smalltalk
@@ -49,3 +50,4 @@ Therefore, if you consider using OSGi, then I am sure we can make the difference
 [About aQute]: aqute
 [About OSGi]: osgi
 [Articles]: posts
+[Customers]: customers

@@ -22,7 +22,7 @@ you learn the technology so we can move on to the next customer's task.
 
 [Contact](contact) us if you want to talk.
 
-# Example Services Provided
+# Examples
 
 aQute is a flexible agile company that can move fast because it has a large world wide network 
 of companies and consultants that are used to work together in different projects. Since we can
@@ -33,4 +33,5 @@ obtain the right expertise quickly we can provide the following services:
 * **Software** – Selecting an open source software stack and, if necessary, developing turn key components that are not available in other ways.
 * **Hosting** – Provide remote management, event processing, and analytics as a hosted service.
 * **Logistics** – Provide logistics to work with multiple partners for any activities that are required by an IoT project and need to be outsourced.
+* **Speaker** – Speaking on conferences or workshops.
 
