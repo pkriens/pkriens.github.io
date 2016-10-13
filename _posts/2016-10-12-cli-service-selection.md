@@ -91,11 +91,18 @@ The Swing interface is slightly more complex since we want it to also be used
 as default. This makes the filter a tad more complex. We should run either
 when no mode is set or when the mode is set to console. Naively this looks like:
 
-	(|(!(launcher.arguments=-mode:*))(launcher.arguments=-mode:swing))
+	(|
+		(!
+			(launcher.arguments=-mode:*)
+		)
+		(launcher.arguments=-mode:swing)
+	)
 
 However, as I quickly found out, this matched another service that did not have
-the `launcher.arguments` property but was registered under Object. So we need
-to require that the matched server has at least one value for the arguments.
+the `launcher.arguments` property but was registered under Object. That is, the
+`!` operator made it match ANY service that did not have the `launcher.arguments` 
+property. So we need to require that the matched server has at least one value 
+for the arguments.
 
 	(|
 		(&
@@ -139,7 +146,8 @@ This gives us the following swing implementation:
 
 ## HTML Implementation
 
-The HTML provider follows the same pattern and is not shown here.
+The HTML provider follows the same pattern and is not shown here. You can find
+the code that prints to the browser in the [Github repository][1].
 
 ## Running the Example
 
@@ -164,9 +172,12 @@ directly from the command line:
 
 	 
 
+## Links
+
+* [https://github.com/aQute-os/biz.aQute.implementation-selection](https://github.com/aQute-os/biz.aQute.implementation-selection)
 
 
-	
+[1]: https://github.com/aQute-os/biz.aQute.implementation-selection
 
 
 
