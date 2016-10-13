@@ -63,5 +63,5 @@ automatically:
 
 ## Links
 
-You can find the software on [https://github.com/aQute-os/biz.aQute/biz.aQute.semantic-logging](https://github.com/aQute-os/biz.aQute/tree/master/biz.aQute.semantic-logging)
+You can find the software on [https://github.com/aQute-os/biz.aQute.semantic-logging](https://github.com/aQute-os/biz.aQute.semantic-logging)
 

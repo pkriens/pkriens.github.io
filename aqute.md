@@ -8,7 +8,8 @@ layout: default
 
 aQute was founded in 1990 by Peter Kriens. The company provided software consultancy to a 
 very large number of  major international companies. The consultancy consisted of mentoring,
-turn key development, or business and strategic studies.
+turn key development, or business and strategic studies. The main focus is and was large
+systems and how to keep them maintainable over time. 
 
 We were involved at the founding of the OSGi Alliance in 1998, representing Ericsson. In 
 2001 we were charged with professionalizing the specifications. This expertise was used
@@ -26,3 +27,9 @@ companies that have to make the jump into IoT.
 
 * OSGi Alliance — aQute has played a major role in the OSGi Alliance through its founder, Peter Kriens.
 * bnd – aQute started with btool which later became bnd. It is an OSGi build tool that embeds an enormous amount of OSGi expertise to simplify creating high quality bundles.
+* Bndtools – An Eclipse plugin based on bnd to build bundles the right way
+* OSGi enRoute – Took the initiative and wrote most of the web site, bundles, and tutorials
+* Apache Felix – Committer. Added Apache Felix Fileinstall and Gogo shell
+* Equinox – Committer.
+* Java 9 Jigsaw Expert Group – Served on the JSR EG.
+* OOPSLA – Served as chair 6 times

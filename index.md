@@ -8,7 +8,8 @@ Software has been my life since my first programmable calculator in 1976 blew aw
 my mind. In the eighties this happened again when I discovered [Smalltalk]
 after which I became a (professional) evangelist for [OO]. While working for 
 [Ericsson Research] in the nineties I was part of founding the [OSGi Alliance]. 
-The microservices in OSGi _avant la lettre_, blew my mind away again.
+The microservices in OSGi _avant la lettre_, blew my mind away again. This
+model of modularity was the next step.
 
 I am proud to have played a key role in the development of OSGi as the
 specifications editor and in other roles. As the lead developer  of [bnd], a key open source 
@@ -27,7 +28,7 @@ aQute is a _small_ company by choice because we can tap into a large internation
 of developers. This allows us to stay agile but still offer a  large number of services 
 in your local language, which makes learning new technologies a lot easier. 
 
-Therefore, if you consider using OSGi, then I am sure we can make the difference!
+Therefore, if you want to build for the future, then I am sure we can make the difference!
 
 <div style="margin-top:10px;text-align:right;margin:30px"><a href="mailto:Peter.Kriens@aQute.biz?subject=Information">Peter Kriens</a></div>
 

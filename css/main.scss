@@ -32,10 +32,17 @@ $on-palm:          600px;
 $on-laptop:        800px;
 
 
+[onclick] {
+	cursor:pointer;
+}
 body {
 	min-width: 500px;
 }
 
+.copyright {
+	font-size: smaller;
+	color: lightgrey;
+}
 // Use media queries like this:
 // @include media-query($on-palm) {
 //     .wrapper {
@@ -76,6 +83,7 @@ h1, h2, h3, .title {
 .dropdown {
     position: relative;
     display: block;
+    color: $brand-color;
 }
 
 .dropdown-content {
@@ -104,7 +112,7 @@ h1, h2, h3, .title {
 .shout {
 	font-family: Palatino, serif;
 	font-weight: bold;
-	text-shadow: 1px 0 0 #CCC, 0 -1px 0 #CCC, 0 1px 0 #CCC, -1px 0 0 #CCC;
+	color: $brand-color;
 }
 
 img.thumb {

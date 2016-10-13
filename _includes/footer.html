@@ -1,23 +1,29 @@
 <footer class="site-footer">
 
-  <div class="wrapper">
-
-    <div class="footer-col-wrapper">
-      <div class="footer-col footer-col-1">
-        <ul class="contact-list">
-          <li>{{ site.title }}</li>
-          <li><a href="mailto:{{ site.email }}">{{ site.email }}</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col footer-col-2">
-      </div>
-
-      <div class="footer-col footer-col-3">
-        <p>{{ site.description }}</p>
-      </div>
-    </div>
-
-  </div>
-
+	<div class="wrapper">
+	
+		<table>
+			<colgroup>
+				<col style="width:32%">
+				<col style="width:32%">
+				<col style="width:32%">
+			</colgroup>
+			<tr>
+				<td>
+					<a 
+						href="https://twitter.com/share" 
+						class="twitter-share-button" 
+						data-text="{{page.title}}" 
+						data-show-count="true">Share</a>
+						<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+				</td>
+				<td>
+					<p class=copyright>Copyright 2016 aQute All Rights Reserved</p>
+				</td>
+				<td>
+					<p style="font-size:smaller;color:lightgrey">{{ site.description }}</p>
+				</td>
+			</tr>
+		</table>
+	</div>	
 </footer>
