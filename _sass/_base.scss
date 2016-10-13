@@ -94,7 +94,7 @@ figcaption {
  * Lists
  */
 ul, ol {
-    margin-left: $spacing-unit;
+    margin-left: $spacing-unit/2;
 }
 
 li {
@@ -138,13 +138,10 @@ a {
  * Blockquotes
  */
 blockquote {
-    color: $grey-color;
-    border-left: 4px solid $grey-color-light;
     padding-left: $spacing-unit / 2;
-    font-size: 18px;
-    letter-spacing: -1px;
-    font-style: italic;
-
+	font-family: "Palatino", cursive, sans-serif;
+	font-style: italic;
+	font-size: larger;
     > :last-child {
         margin-bottom: 0;
     }
@@ -157,19 +154,15 @@ blockquote {
  */
 pre,
 code {
-    font-size: 12px;
-   font-family: monospace;
-    border: 1px solid $grey-color-light;
-    border-radius: 3px;
-    background-color: #fff4ee;
-    
+    font-family: monospace;
+    font-style: normal;
 }
-
 code {
-    padding: 1px 5px;
+	font-size: $base-font-size*1.1;
 }
-
 pre {
+    background-color: #f4f4f4;
+    border-radius: 3px;
     padding: 8px 12px;
     overflow-x: auto;
 
@@ -177,6 +170,7 @@ pre {
         border: 0;
         padding-right: 0;
         padding-left: 0;
+        font-size: $base-font-size;
     }
     &:before {
         float:left;
