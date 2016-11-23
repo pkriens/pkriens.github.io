@@ -1,9 +1,11 @@
 ---
-title: Declarative Services and Time
+title: Declarative Services and Concurrency
 layout: post
 description: Concurrency and DS work very well together but there are pitfalls.
 comments: true
 ---
+
+# Declarative Services and Concurrency
 
 I've just finished a rather extensive application note about concurrency and other
 time related issues for a customer. I've shared this application note with
