@@ -95,7 +95,7 @@ The Aggregate State now looks like:
 
 This allows us to wait for at least 3 siblings and more than one region:
 
-	@Reference( target="(&(#siblings>=3)(%region>=1))")
+	@Reference( target="(&(#siblings>=3)(%region>=2))")
 	AggregateState state;
 
 Clearly, we need Sibling D before this component will be started:
