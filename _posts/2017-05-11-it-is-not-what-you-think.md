@@ -1,3 +1,10 @@
+---
+layout: post
+title: Modules Without a Cause
+description: A tad of frustration with the state of modularity in our industry
+comments: true
+---
+
 # Modules Without a Cause
 
 
