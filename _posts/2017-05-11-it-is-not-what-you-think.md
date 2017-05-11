@@ -9,9 +9,13 @@ Module to module dependencies cause long transitive implementation dependencies 
 
 My biggest frustration of the past 18 years is how the the core concept of OSGi remains utterly misunderstood by the larger industry. With clockwise regularity bloggers declare OSGi too complex or stupid because they do fail to immediately recognize its dependency model. Since these bloggers are so smart (hey, they work for Google!) there can only be one reason why they do not recognize it, it must be stupid! Therefore, a last, likely futile, attempt to describe OSGi dependencies for those that are not dummies.
 
+## Transitive Dependencies
+
 The standard dependency model used in most of the world is module-to-module dependencies. Each model has a name (and in decent systems a version) that is used to express a chain of dependencies. If module A depends on module B, and module B on module C and D then the _transitive_ dependency chain is A -> B, C, D.
 
 If you take an object oriented program then one instance of this dependency model is the transitive dependencies of a _class_. After all, a class _is a_ module. In object oriented software we took some time in the eighties and early nineties to learn that transitive dependencies, well, eh, suck. Natural gasses would be duly impressed if they could notice how quickly a software systems increases entropy. Any, likely not so proud, owner of a monolith can testify of the amazing speed of software diffusion. From greenfield to a [big ball of mud][1] in only a few years. 
+
+## Entanglement
 
 The _fan out_ of dependencies in software is so large because we, unnecessarily, depend our components on the transitive _implementation_ dependencies. When I use a module A I do not care at all about how it is implemented since it performsonly  a certain _role_ for me. However, if I use module A I am forced to include all its dependencies. How it logs, what database it uses, etc. And this is recursive, for each of those dependencies I need to again include all their dependencies, ad nauseum. Anybody that wanted to excavate a part of a monolith knows that sucking feeling when you have to include module after module because everything seems entangled. Software tends to get much worse in stickyness than chewing gum in your hair!
 
@@ -21,9 +25,13 @@ We generally have no good way what part of what JARs are actually going to be ex
 
 Analysing today's classpaths of popular systems or WARs is a terrifying way to spent time. Huge chunks of code would blow up if they ever were reached by the processor. It never ceases to amaze me that we accept a rather mediocre language like java because it has a very strong type system but when finally the rubber of our applications hit the road, we seem to no longer care about any of that safety. Hey it runs!
 
+## Interfaces Come to the Rescue
+
 Fortunately, with Java in 1996 we got an amazing tool to better handle transitive dependencies: _interfaces_. Interfaces allowed us to decouple the _role_ of an object from the _implementation_ of that role. Since we no longer depend on an actual implementation we no longer depend on its transitive dependency chain. The buck does indeed stop at an interface. Interfaces allow us to specify a dependency on a _role_ instead of an _actor_. You know, this trick is actually very popular in the real world. When I order a plumber I totally objectify the guy (gender intended) and could not care less about his identity. I just want him to be a _plumber_ and fix my overflowing toilet. If he would require a huge truck that could ruin my lawn I'd look for another plumber with less severe requirements. 
 
 Interfaces are a great example of how our industry actually learned from past mistakes. I can't recall when it was the last time I saw Java software that did not leverage interfaces in some way.
+
+## What Can We Learn from Interfaces?
 
 That makes it all the more puzzling that when we get to other modules than classes we totally ignore those lessons. This is the part where people usually start to glaze and yell: "What have interfaces got to do with modules? They are completely different things! This guy is insane!" For those who can shut down their noisy intuition for a moment I'll try to make it clear why interfaces teach us a priceless lesson about modularity.
 
@@ -34,6 +42,8 @@ So from now on in this article the JPMS module, JBOss module, or OSGi bundle are
 The million dollar question is now how to express dependencies from one to another bundle? The simple, but wrong, level would be to use the name of the bundle, i.e. Require-Bundle in OSGi parlance. I hope you picked enough of the previous text to agree now that that would be a hopeless idea. But what is the _interface_ of a bundle? 
 
 We could have used the Java interface name as the dependency. This is a common technique in Dependency Injection (DI), a class tells that a field needs a Foo and the container arranges that a proper Foo instance gets injected. This could work but is not a very natural model. In practice, an API is rarely specified with only a single interface. In every API I created there are interfaces to be implemented by the consumer of the API (e.g. a Listener), interfaces to be implemented by the provider of the API (i.e. an Admin), and there are helper objects (i.e. an Event). Though you could stretch it by putting all these classes/interfaces in a single class a more natural layout for all these types is the Java package, in itself a proper module. Using the package as the dependency anchor was a jump in the dark many years ago. However, 18 years of experience have shown that it was a brilliant move. 
+
+## The Problem is Bigger than That
 
 However, this raised a very serious roadbloack. A huge advantage of a legacy module system is that determining the transitive dependency chain is trivial. Once you break the 1:1 link between bundles there is no longer a single solution, multiple bundles may export the same package. Though this is exactly what you need for a reusable model because there will be many different runtimes if your component is popular. However, now you need a _resolver_ that selects a set of matching bundles. Clearly this is an additional step that does not make life easier. However, since our primary goal in OSGi is to provide a reusable component system using identity dependencies is just unworkable. So we took the plunge and made the resolver an integral part of OSGi.
 
