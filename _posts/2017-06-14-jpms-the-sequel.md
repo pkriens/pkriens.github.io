@@ -5,6 +5,8 @@ description: The long lasting demonstration why software is hard
 comments: true
 ---
 
+# JPMS, The Sequel
+
 I tried to ignore JPMS but my renewed love of formal specifications got the better of me. Trying to put JPMS in [Alloy][1], a formal specification language, made me aqutely aware of how badly specified JPMS really is. There are loose ends, plain errors, confusing statements, unclear terminology. Strangely, this seem not to faze anybody as far as I can see. Java is supposed to be the language of 9 million developers and 3 billion devices, should we not expect some quality control when a new foundation is laid?
 
 In a series of articles I want to go through the [JPMS document][1], a document describing changes to the language and the VM which was the input to the (failed) vote. However, this is only a part of the 'specification' it seems. The rather stale [State Of the Module System][3], also in Mark Reinhold's home directory, is the most up to date document I could find that discusses the more concrete aspects of Jigsaw but states it is the proposal for the JPMS. Puzzling.
