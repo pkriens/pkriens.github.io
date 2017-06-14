@@ -167,26 +167,26 @@ Last, need to define the `Observable` universe:
 
 The predicate can now be:
 
-      pred isStaticAccessible( m : Module, p : Package ) {
+	pred isStaticAccessible( m : Module, p : Package ) {
 
-	// Code inside the module may access public and 
-	// protected types of all packages in the module.
+		// Code inside the module may access public and 
+		// protected types of all packages in the module.
 
-	p in m.content						
+		p in m.content						
 
-	// For a qualified statement, the 
-	// public and protected types in the package, and their 
-	// public and protected members, are accessible solely 
-	// to code in the modules specified in the to clause. 
+		// For a qualified statement, the 
+		// public and protected types in the package, and their 
+		// public and protected members, are accessible solely 
+		// to code in the modules specified in the to clause. 
 
-	or  p in m.dependences.qualifiedExports.m
+		or  p in m.dependences.qualifiedExports.m
 
-	// For an unqualified statement, these types and 
-	// their members are accessible to code in any module. 
+		// For an unqualified statement, these types and 
+		// their members are accessible to code in any module. 
 
-	or  p in m.dependences.unqualifiedExports
+		or  p in m.dependences.unqualifiedExports
 
-      }
+	}
 
 
 ## Running
