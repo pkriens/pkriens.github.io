@@ -66,8 +66,8 @@ The [spec documents][1] says:
 
 ### Issues
 
-* `PackageDeclaration` in a module declaration seems topsy turvy and it does not compile. So ignoring this.
-* The module name in the declaration uses a different production then the module name in the requires. They are identical but it is sloppy.
+* `PackageDeclaration` in a module declaration seems topsy turvy and it does not compile. So ignoring this. (**Update June 15:** this is from an out of date document it seems.)
+* The module name in the declaration uses a different production then the module name in the requires. They are identical but it is sloppy. (**Update June 15:** From Alex Buckley: One is a declaration of an entity (introduces a name for the entity by specifying identifiers) and one is a use of a previously declared entity (specifies a previously introduced name). It so happens that the syntactic forms are the same, but it is proper to distinguish declaration from use as has been done throughout the JLS since 1996.)
 
 ### Model
 
