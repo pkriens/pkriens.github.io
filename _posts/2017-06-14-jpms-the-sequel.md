@@ -17,7 +17,7 @@ This first installment is purely about the JLS. later installments will dive int
 
 Alloy is the first formal specification language I met that is quite readable, even for beginners, accompanied with a terrific tool to interactively explore specification models. Though it cannot provide a formal proof, it can efficiently traverse a complete state spaces for a limited number of instances to find (counter) examples of invariants or special cases. Though this is therefore not a formal proof, it is usually more than sufficient because most specification errors can be demonstrated with only a few instances. Alloy guarantees to find these instances when they are in scope. 
 
-A good introduction of Alloy is the [Daniel Jackson's presentation to ICSE][4]. In this aricle, I will try to explain the different concepts used to make them readable for experienced Java developers.
+A good introduction of Alloy is the [Daniel Jackson's presentation to ICSE][5]. In this aricle, I will try to explain the different concepts used to make them readable for experienced Java developers.
 
 Most important thing to remember is that Alloy (or formal specs in general) are like carving a statue. You start with the infinite state space of all possible combinations and you then put constraints to whittle down this space. That is, you can only remove because you start with the universe. That is, there is nothing more to add. As Java developers we always think in the opposite: we build things from smaller parts. For example, if a statement says `# foo = 4` then we are not _creating_ a set with 4 elements but we're throwing away all state where `foo` is not sized 4. Understanding that we're reasoning about an infinite state took me very long to internalise.
 
@@ -217,3 +217,4 @@ Let me know if you find this interesting enough to see a next installment.
 [2]: http://cr.openjdk.java.net/~mr/jigsaw/spec/lang-vm.html
 [3]: http://openjdk.java.net/projects/jigsaw/spec/sotms/
 [4]: https://raw.githubusercontent.com/pkriens/pkriens.github.io/gh-pages/jpms/compile-only.als
+[5]: http://people.csail.mit.edu/dnj/talks/icse17/icse17-nobuilds.pdf
