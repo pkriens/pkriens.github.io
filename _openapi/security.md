@@ -43,7 +43,7 @@ To get started, use the security suite based on the OSGi User Admin service. Thi
 This translates to:
 
 * Type is Basic Authentication
-* Security definition name is `basic`
+* Security definition name is `basicauth`
 
 The following bundles are required to provide an OpenAPI Service Provider and Authority service based on User Admin.
 
