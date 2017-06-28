@@ -1,13 +1,42 @@
 
 # Open API Security
 
-## TL;DR
+## Example
+
+In this example we implement the following OpenAPI source that has two methods that use basic authentication:
+
+          {
+               "swagger": "2.0",
+               "securityDefinitions": {
+                    "basicauth": {
+                        "type": "basic"
+                    }
+               },
+               "security": [ {
+                         "basicauth":[]
+               } ],
+               "basePath": "/basic",
+               "paths": {
+                    "/authenticated": {
+                         "get": {
+                              "operationId": "authenticated"
+                         }
+                    },
+                    "/unauthenticated": {
+                         "get": {
+                              "operationId": "unauthenticated",
+                              "security": []
+                         }
+                    }
+               }
+          }
+
 
 For each defined security provider in the OpenAPI source an OpenAPI Security Provider service must be registered. The service property `name` for this service must match the name of the service provider in the source.
 
 To get started, use the security suite based on the OSGi User Admin service. This suite has an implementation for the different security provider types. For example, we need to configure the following security definition in the OpenAPI source:
 
-     "basic": {
+     "basicauth": {
         "type": "basic"
       }
  
@@ -19,20 +48,30 @@ This translates to:
 The following bundles are required to provide an OpenAPI Service Provider and Authority service based on User Admin.
 
 * `biz.aQute.openapi.security.useradmin.provider` – Provides a configurable basic authentication provider. The key used in useradmin to find the given user name is configurable as is the salt and the hash used. It also provides a Gogo command to set and remove basic authentication ids and their hashed+salted password.
-* `biz.aQute.useradmin.util` – Provides an implementation of the OSGi enRoute Authority based on the OSGi User Admin. Also here with a Gogo command to manipulate the users in User Admin. This authority provider supports a super set of [Apache Shiro] permission syntax.
+* `biz.aQute.useradmin.util` – Provides an implementation of the OSGi enRoute Authority based on the OSGi User Admin. Also here with a Gogo command to manipulate the users in User Admin.
 
 ### Configuring Basic Authentication
 
+Create a new factory configuration for `biz.aQute.openapi.ua.basic`:
 
+|  Key    | Comment                               | Default value                 |
+|---------|---------------------------------------|-------------------------------|
+| `name`  | Name of the security provider.        | `basic-auth`                  |
+| `hash`  | Algorithm to hash the passwords       | `{ PLAIN, SHA,` **SHA_256**`,  SHA_512 }` |
+| `salt`  | salt to use for the hashing           | `byte[]{}`                    |
+| `idkey` | User Admin property key for id, when this is empty, the User id is used.   | `aQute.ua.id`                 |
+| `pwkey` | The key in the users credentials for hashed password  | `aQute.ua.pw`                 |
 
-We can 
-| PID                      | Key                   | Value                |
-|--------------------------|-----------------------|----------------------|
-| biz.aQute.openapi.ua.basic  | hash                  | { PLAIN, SHA, **SHA_256**,  SHA_512 } |
-|                          | salt                  | byte[]               |
-|                          | name                  | 'basic-auth'         |
-|                          | idkey                 | 'aQute.ua.id'        |
-|                          | pwkey                 | 'aQute.ua.pw'        |
+The defaults should set you up ok. However, since this is a factory, you need to create it of course.
+
+In Gogo you can now setup a user:
+
+     G! basicauth -u u123456 some.user@example.com SECRET_PASSWORD
+     some.user@example.com
+{.shell}
+
+And 
+
 
 
 
