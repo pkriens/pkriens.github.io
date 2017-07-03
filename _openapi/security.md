@@ -1,7 +1,33 @@
 
 # Open API Security
 
-## Example
+## Introduction
+
+The Open API Suite Security implements the requirements regarding security in the Open API specification. The OpenAPI Suite has a design supporting the three required security schemes using OpenAPI Security Provider services. When the OpenAPI source requires a security check, the OpenAPI runtime will get the appropriate provider and pass it the defined parameters. The OpenAPI Security Provider will then answer what to do. 
+
+Although called _security_ in the OpenAPI specification, this security is actually limited to _authentication_. This seems to imply that the answer from an OpenAPI Security Provider service is a simple boolean. However, in the OpenAPI specifications, it is possible to require multiple security providers in any combination of `and` and  `or`. For example, it is (theorethically) possible to require a Basic Authentication `or` and OAuth authentication. Though this is extremely flexible the specification does lack the details of how this should be implemented. The OpenAPI Suite provides a full implementation by providing pragmatic implementations.
+
+The set of OpenAPI 2.0 specifications security schemes is rather limited. However, the OpenAPI Suite allows the existing schemes to be used with other authentication schemes. For example, it is straighforward to implement rate limiting schemes, monitoring, or support more secure forms of Basic Authentication. 
+
+## Essentials
+
+* Basic Authentication – Supports basic authentication as defined in [RFC 2617][1].
+* API Key – Verification of a header or query parameter
+* OAuth2 – Redirects the browser to another side for authentification
+
+## Entities
+
+## Overview
+
+![OpenAPI Security Diagram](https://user-images.githubusercontent.com/200494/27738237-13caffc6-5dab-11e7-8c65-e594f6ffde48.png)
+
+The OpenAPI security architecture provides a pluggable system for the myriad of authentication and authorisation systems out there. It does this with a number of services.
+
+The OpenAPI Security Provider is the service that handles the authent
+
+## Authentication
+
+At the core the OpenAPI Runtime provider 
 
 In this example we implement the following OpenAPI source that has two methods that use basic authentication:
 
@@ -102,5 +128,6 @@ The Open API security consists of the _authentication_ and _authorization_. For 
 
 
 
+[1]: https://github.com/aQute-os/biz.aQute.openapi/tree/master/biz.aQute.openapi.basicauth.example
 [RFC 2617]: https://www.ietf.org/rfc/rfc2617.txt
 [Amazon Signing Version 4]: http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html
