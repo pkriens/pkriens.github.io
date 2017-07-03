@@ -9,11 +9,15 @@ Although called _security_ in the OpenAPI specification, this security is actual
 
 The set of OpenAPI 2.0 specifications security schemes is rather limited. However, the OpenAPI Suite allows the existing schemes to be used with other authentication schemes. For example, it is straighforward to implement rate limiting schemes, monitoring, or support more secure forms of Basic Authentication. 
 
+The OpenAPI specifications are moot on the _authorization_ aspects of writing microservices. The OpenAPI Suite 
+
 ## Essentials
 
 * Basic Authentication – Supports basic authentication as defined in [RFC 2617][1].
 * API Key – Verification of a header or query parameter
 * OAuth2 – Redirects the browser to another side for authentification
+* Flexible – Applications can provide their own services for special schemes
+* Off the shelf – Large number of OpenAPI Security Providers included out of the box
 
 ## Entities
 
