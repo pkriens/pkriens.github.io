@@ -9,7 +9,7 @@ Although called _security_ in the OpenAPI specification, this security is actual
 
 The set of OpenAPI 2.0 specifications security schemes is rather limited. However, the OpenAPI Suite allows the existing schemes to be used with other authentication schemes. For example, it is straighforward to implement rate limiting schemes, monitoring, or support more secure forms of Basic Authentication. 
 
-The OpenAPI specifications are moot on the _authorization_ aspects of writing microservices. The OpenAPI Suite 
+The OpenAPI specifications are moot on the _authorization_ aspects of writing microservices. However, authentication is closely connected to authorization. The _identity_ that is established with authentication is used to link to the set of _permissions_ that the request has. Unfortunately, in Java this is an area with lots of choices and even a number of false starts. The OpenAPI suite provides authentication based on Apache Shiro and for very lightweight implementations the OSGi User Admin service. In addition, providing your own authentication and/or authorization schemes is possible.
 
 ## Essentials
 
@@ -18,16 +18,22 @@ The OpenAPI specifications are moot on the _authorization_ aspects of writing mi
 * OAuth2 – Redirects the browser to another side for authentification
 * Flexible – Applications can provide their own services for special schemes
 * Off the shelf – Large number of OpenAPI Security Providers included out of the box
+* Authorization – Leverage the OSGi enRoute Authority service to access Shiro, User Admin, or custom authorization schemes.
 
 ## Entities
 
-## Overview
+* OpenAPI Runtime – The runtime that executes the microservice requests.
+* OpenAPI Security Provider – Implements a named OpenAPI Security Scheme.
+* Authority – A service granting permissions
+* Authority Admin – The service used to associate a thread with an authenticated identity
+* OpenAPI Base – The base class used for microservices.
+* Servlet – The actual servlet used for dispatching microservice requests
+
+## Architecture
 
 ![OpenAPI Security Diagram](https://user-images.githubusercontent.com/200494/27738237-13caffc6-5dab-11e7-8c65-e594f6ffde48.png)
 
 The OpenAPI security architecture provides a pluggable system for the myriad of authentication and authorisation systems out there. It does this with a number of services.
-
-The OpenAPI Security Provider is the service that handles the authent
 
 ## Authentication
 
