@@ -1,7 +1,7 @@
 ---
 layout: post
 title: JPMS: The Module Path
-description: The JPMS Module path is the replacement for the venerable -classpath and solve all its problems. However, it uses the same fragile search strategy. Since the members of the module path must obey many constraints, tooling will be a necessity to curate it. This, however, raises the question for much of the complexity in JPMS.
+description: The JPMS Module path is the replacement for the venerable -classpath and solve all its problems. 
 comments: true
 ---
 
