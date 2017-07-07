@@ -11,7 +11,7 @@ I originally focused on the internal parts of JPMS and not so much its interacti
 
 The following class diagram provides an overview of the JPMS design as I understand it. 
 
-![image](https://user-images.githubusercontent.com/200494/27958689-8e10b748-6324-11e7-83d1-4989e6e6a257.png)
+![image](https://user-images.githubusercontent.com/200494/27959164-ac65e892-6326-11e7-8a87-4fcd90643633.png)
 
 The Module and ModuleLayer class are the runtime artefacts. The Configuration is a resolution of a set of root module names using two Module Finders and  parent configurations. The configuration is then used to create a Module Layer with modules. 
 
