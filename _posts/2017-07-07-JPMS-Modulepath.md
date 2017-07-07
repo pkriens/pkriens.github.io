@@ -44,14 +44,12 @@ All modules read their required modules
 All imports for a module are available in the module or exported to it by one of its read modules
 No overlapping packages between the modules 
 
-That is quite a number of constraint to leave up to such a fragile search strategy. In practice, it is really hard to see that anything but a simple ‘Hello World’ program requires strict curation of the module path. It also seems extremely unlikely that you can share directories on your module path, after all, what you then have is DLL Hell. An update of one application can destroy another application. The consequence is that each application will require its own container with a set of strictly curated members. (e.g. a directory with a set of JARs.) 
+That is quite a number of constraint to leave up to such a fragile search strategy. In practice, it is really hard to see that anything but a simple ‘Hello World’ program requires strict curation of the module path. It also seems extremely unlikely that you can share directories on your module path, after all, what you then have is DLL Hell. An update of one application can destroy another application. The inevtiable consequence is that each application will require its own container with a set of strictly curated members. (e.g. a directory with a set of JARs.) 
 
-I therefore see no way around tooling that for a given application provides a directory (or some container) with the JARs that are part of that application? Clearly, this is messy because it will create a huge redundancy of directories with many will have the same JARs. Yes, you can be clever with file links and surely people will get this to work. But one wonders if there is not a simpler solution.
+Realise that the core problem is the lack of versions in the module. A module name, unless it embodies a version or GUID, is not a unique identifier for a module. This makes it impossible to 'find' a module in a repository, there is just not enough information in the query to the Module Finder.
 
-	Peter Kriens
+I therefore see no way around tooling that for a given application provides a directory (or some container) with the JARs that are part of that application? Clearly, this is not optimal because it will create a huge redundancy of directories with many will have the same JARs. Yes, you can be clever with file links and surely people will get this to work. But one wonders if there is not a much simpler solution.
 
-
-
-
+> Peter Kriens
 
 [1]: http://download.java.net/java/jdk9/docs/api/java/lang/module/package-summary.html
