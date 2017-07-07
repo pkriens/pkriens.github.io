@@ -5,7 +5,7 @@ description: The JPMS Module path is the replacement for the venerable -classpat
 comments: true
 ---
 
-* JPMS Modulepath
+# JPMS Modulepath
 
 I originally focused on the internal parts of JPMS and not so much its interaction with the outside world. This left the module path out of focus and I, admittedly, had the wrong impression. After my last article it became clear that this rather important part of the specification was neither in the JLS draft nor in the JPMS design document but in the [Javadoc of the `java.lang.module` package][1]. That was not the only mistake I made, I also started with the compiler view. Since then I realised that the compiler view has an oddity. During compilation, the module compilation unit can access annotation types from other modules. However, at that time you do not know yet what other modules are observable. Just like the complete separate grammar for a Java source file and the module definition it is an another indication that class files are not really suitable. It therefore seems simpler to focus on the runtime first.
 
