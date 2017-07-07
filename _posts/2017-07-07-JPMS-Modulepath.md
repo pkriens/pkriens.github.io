@@ -1,37 +1,47 @@
+---
+layout: post
+title: JPMS: The Module Path
+description: The JPMS Module path is the replacement for the venerable -classpath and solve all its problems. However, it uses the same fragile search strategy. Since the members of the module path must obey many constraints, tooling will be a necessity to curate it. This, however, raises the question for much of the complexity in JPMS.
+comments: true
+---
+
 * JPMS Modulepath
 
 I originally focused on the internal parts of JPMS and not so much its interaction with the outside world. This left the module path out of focus and I, admittedly, had the wrong impression. After my last article it became clear that this rather important part of the specification was neither in the JLS draft nor in the JPMS design document but in the [Javadoc of the `java.lang.module` package][1]. That was not the only mistake I made, I also started with the compiler view. Since then I realised that the compiler view has an oddity. During compilation, the module compilation unit can access annotation types from other modules. However, at that time you do not know yet what other modules are observable. Just like the complete separate grammar for a Java source file and the module definition it is an another indication that class files are not really suitable. It therefore seems simpler to focus on the runtime first.
 
 The following class diagram provides an overview of the JPMS design as I understand it. 
 
-![image](https://user-images.githubusercontent.com/200494/27958114-e13f738a-6321-11e7-86f5-3975a7b04cd7.png)
+![image](https://user-images.githubusercontent.com/200494/27958689-8e10b748-6324-11e7-83d1-4989e6e6a257.png)
 
 The Module and ModuleLayer class are the runtime artefacts. The Configuration is a resolution of a set of root module names using two Module Finders and  parent configurations. The configuration is then used to create a Module Layer with modules. 
 
 A Configuration takes a number of roots, a parent configuration, and two module finders. It locates the modules by name, from (in order):
 
 	for each _before_ Module Finder
-		for each Directory in Module Finder
-			names map = empty
-			for each file in Directory
-				create module descriptor
-				if the name is in the map, fail
-				otherwise add name, descriptor to the map
-			if the map contains the searched module, return the Module Descriptor
+	  for each Directory in Module Finder
+	    names map = empty
+	    for each file in Directory
+	      create module descriptor
+	      if the name is in the map, fail
+	        else add name, descriptor to the map
+		
+	    if the map contains the searched module, 
+	      return the Module Descriptor
 
 	for each parent in order
-		search the parent for the requested module recursively
-		if found, return the Module Descriptor
+	  search the parent for the requested module recursively
+	  if found, return the found Module Descriptor
 
 	for each _after_ Module Finder
-		for each Directory in Module Finder
-			names map = empty
-			for each file in Directory
-				create module descriptor
-				if the name is in the map, fail
-				otherwise add name, descriptor to the map
-			if the map contains the searched module, return the Module Descriptor
-
+	  for each Directory in Module Finder
+	    names map = empty
+	    for each file in Directory
+	      create module descriptor
+	      if the name is in the map, fail
+	        else add name, descriptor to the map
+		
+	    if the map contains the searched module, 
+	      return the Module Descriptor
 
 This clearly resembles the infamous but well known `-classpath` and other _chain of responsibility_ patterns. They are so easy to use! The developer can tweak the resolution by adding directories ahead of the chain and in that way overriding modules later in the chain. 
 
