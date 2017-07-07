@@ -47,12 +47,12 @@ This clearly resembles the infamous but well known `-classpath` and other _chain
 
 However, there are quite a number constraints on the Configuration: 
 
-Ensure that the correct module is, at least, first in the search path
-No name clashes between modules
-No module can read itself indirectly
-All modules read their required modules
-All imports for a module are available in the module or exported to it by one of its read modules
-No overlapping packages between the modules 
+* Ensure that the correct module is, at least, first in the search path
+* No name clashes between modules
+* No module can read itself indirectly
+* All modules read their required modules
+* All imports for a module are available in the module or exported to it by one of its read modules
+* No overlapping packages between the modules 
 
 That is quite a number of constraint to leave up to such a fragile search strategy. In practice, it is really hard to see that anything but a simple ‘Hello World’ program requires strict curation of the module path. It also seems extremely unlikely that you can share directories on your module path, after all, what you then have is DLL Hell. An update of one application can destroy another application. The inevtiable consequence is that each application will require its own container with a set of strictly curated members. (e.g. a directory with a set of JARs.) 
 
