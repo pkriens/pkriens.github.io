@@ -1,6 +1,6 @@
 ---
 layout: post
-title: JPMS: The Module Path
+title: JPMS, The Module Path
 description: The JPMS Module path is the replacement for the venerable -classpath and solve all its problems. 
 comments: true
 ---
