@@ -22,22 +22,22 @@ The OpenAPI specifications are moot on the _authorization_ aspects of writing mi
 
 ## Entities
 
-* OpenAPI Runtime – The runtime that executes the microservice requests.
-* OpenAPI Security Provider – Implements a named OpenAPI Security Scheme.
-* Authority – A service granting permissions
-* Authority Admin – The service used to associate a thread with an authenticated identity
-* OpenAPI Base – The base class used for microservices.
-* Servlet – The actual servlet used for dispatching microservice requests
+* _OpenAPI Runtime_ – The runtime that executes the microservice requests.
+* _OpenAPI Security Provider_ – Implements a named OpenAPI Security Scheme. Names are global and shared within a framework.
+* _OpenAPI Security_ – Represents the user information for the OpenAPI suite. OpenAPI Security Providers can use this class to get/set user defined properties and credentials to authenticate a user. The OpenAPI runtime uses this class to verify the permissions.
+* _OpenAPI Base_ – The base class used for microservices.
+* _Servlet_ – The actual servlet used for dispatching microservice requests
 
 ## Architecture
 
-![OpenAPI Security Diagram](https://user-images.githubusercontent.com/200494/27738237-13caffc6-5dab-11e7-8c65-e594f6ffde48.png)
-
 The OpenAPI security architecture provides a pluggable system for the myriad of authentication and authorisation systems out there. It does this with a number of services.
+
+![OpenAPI Security Diagram](https://user-images.githubusercontent.com/200494/28373206-0c07149a-6ca2-11e7-80b9-340fd56e7f0f.png)
 
 ## Authentication
 
-At the core the OpenAPI Runtime provider 
+Authentication is the process of establishing a trusted identity for a user. The Internet has spawned thousands of protocols describing how to authenticate users. The oldest one is called _basic authentication_ which is piggy backed on HTTP. This protocol adds an `Authorization` header 
+
 
 In this example we implement the following OpenAPI source that has two methods that use basic authentication:
 
@@ -105,36 +105,6 @@ In Gogo you can now setup a user:
      G! basicauth -u u123456 some.user@example.com SECRET_PASSWORD
      some.user@example.com
 {.shell}
-
-And 
-
-
-
-
-
-
-
-## Specification Background
-
-The Open API specification defines _security providers_. These providers are defined in the prolog, the `securityDefinitions` and then referred in each operation in the `security` section. The prolog can also define a `security` section, this is treated as the default security scheme when _no_ `security` section exists in the operation. (no security is providing an empty array in this section.)
-
-The following authentication types are supported:
-
-* Basic – Basic Authentication as defined in [RFC 2617]. 
-* API Key – Is used to validate a header or parameter. Can be used to implement schemes like  [Amazon Signing Version 4] or other API key schemes.
-* OAuth2 – Authentication through a third party like Google, Microsoft, Facebook. 
-
-A _security_ section in an operation (or the default in the prolog) supports multiple security providers. These providers are arranged in _and/or_ combinations. Since evaluation this combination is non-trivial, there is need for some support from the service provider implementations. 
-
-The OpenAPI specification does not provide authorization support although for OAuth2 providers it supports _scopes_. 
-
-## Implementation
-
-The OpenAPI provider implementation 
-
-
-
-The Open API security consists of the _authentication_ and _authorization_. For the authentication the suite offers an `OpenAPISecurityProvider` service with a number of implementations. This service is used to associate a request with an identity. These security providers are listed in the spec file by their name. For each operation, the 
 
 
 
