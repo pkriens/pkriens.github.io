@@ -36,6 +36,7 @@ The OpenAPI security architecture provides a pluggable system for the myriad of 
 
 
 ## Security Definitions
+
 The OpenAPI Specification has a `securityDefinitions` section in the prolog. In this section, different security providers that are later used for the operations can be defined. Each definition will get a name, a type, and the parameters for the defined type. 
 
 In the OpenAPI suite the names used for the security definitions are _globals_ during runtime. They are mapped to services properties of the OpenAPI Security Provider.
@@ -49,23 +50,35 @@ An OpenAPI security section definining a basic authentication provider called `b
                     }
                }
 
+Basic Authentication has no parameters.
+ 
+During runtime, this will refer to a service with the following properties:
+
+    objectClass     OpenAPISecurityProvider
+    name            basicauth
+    type            basic
+
+There should only be one `OpenAPISecurityProvider` service with these properties registered.
+
 ## Security Section
 
-The `security` section defines when a security provider is used. It refers by name to the security definitions and can provide additional parameters. 
-,
+The `security` section can be defined in the prolog and overridden for each operation. In the prolog it defines the default security that is applied when no `security` section is defined in an operation. The `security` section primarily refers to a security definition although in the case of OAuth it can provide additional parameters for the local check. It looks as follows:
+
                "security": [ {
                          "basicauth":[]
                } ]
 
-For each defined security provider in the OpenAPI source an OpenAPI Security Provider service must be registered. The service property `name` for this service must match the name of the service provider in the source.
+The security section is an array of _security requirements_. Each member of the array is an alternative. That is, any of the security requirements can match to succeed. The security requirement is a map where the keys are the names of the security definitions and the value is an array holding additional parameters. If you think this allows for mindboggling complex authentication schemes then we agree.
 
-To get started, use the security suite based on the OSGi User Admin service. This suite has an implementation for the different security provider types. For example, we need to configure the following security definition in the OpenAPI source:
+## Runtime
 
-     "basicauth": {
-        "type": "basic"
-      }
- 
-This translates to:
+The code generated from the security information will authenticate the user just before the validation and the actual call to the microservice implementation. The authentication phase will try to find one of the alternative security requirements. However, this is harder then it sounds. Some authentication schemes can request credentials or take some action so that they can be authenticated. However, if one of the security requirements succeeds there should be no need to ask for credentials. The authentication code will therefore try to find a security requirement that succeeds. If no security requirement succeeds, the first OpenAPI Security Provider that could request credentials is asked to ask the caller to provide credentials.
+
+For example, Basic Authentication checks the Authorization header. If there is no such header it can request such a header by setting the WWW-Authenticate header and returning a 403 error code to the caller. The Basic Authentication OpenAPI Security Provider will there indicate that it is not authenticated but it could set the response to request credentials. If the OpenAPI Runtime cannot find another OpenAPI Security Provider that says it is authenticated it will ask the Basic Authentication provider to request the credentials.
+
+This sounds (and is) complicated. However, in most of the cases there is only a single security provider in play.
+
+
 
 * Type is Basic Authentication
 * Security definition name is `basicauth`
