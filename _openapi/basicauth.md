@@ -1,5 +1,6 @@
-# Basic Auth Example
+# Example Authentication
  
+
 This example demonstrates the use of the [HTTP Basic Authentication][1] in the OpenAPI suite. It creates a REST endpoint at `/openapi/security/basic` with two operations:
  
 * `/authenticated/{action}` – Verify if the action is authorized while requiring authentication. The return is a `boolean`.
