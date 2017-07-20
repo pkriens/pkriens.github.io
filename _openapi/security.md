@@ -191,9 +191,9 @@ For this, every authenticator is accessible through a URI on the local server.
     
 The following commands are supported:
 
-* login – Start an authenticator specific login procedure. The URI can require authenticator specific parameters.
-* logout – Start an authenticator specific logout procedure. The URI can require authenticator specific parameters.
-* ... – Any other command is forwarded to the authenticator. This can, for example, be used for authentication callbacks like used in OAuth2.
+* login – Start an authenticator specific login procedure. The URI can require authenticator specific parameters. After this call succeeds the http session is normally associated with the authenticated user. Subsequent calls from the same browser will then more quickly be authenticated.
+* logout – Start an authenticator specific logout procedure. The URI can require authenticator specific parameters. Generally, this will remove any authenticated users from the Http session with the browser.
+* ... – Any other command is forwarded to the authenticator. This can, for example, be used for URL based callbacks like used in OAuth2.
 
 
 ### Single Page Web Apps
@@ -213,82 +213,24 @@ Since the original single page web app is likely to be interested in the result 
 * `error` – An error code. This error code uses the OAuth2 defined error codes. If the flow succeeded then the error code witll be `ok`. Any custom error codes are prefixed with `x_`. 
 * `error_description` – A description of the error that happened.
 
+It is up to the closing page how the window is closed and the result is communicated to the single page web app. One possible mechanisms is to use the HTML 5 `sendMessage` support. This mechanism is used in the authentication example which is part of the OpenAPI suite.
 
+The logout flow is usually simpler. It consists of removing any authentication state from the current Http session. However, it use the same separate window flow.
 
-###     
-    
+### Reflection on Authenticators
 
-Authenticators provided:
+The OpenAPI Runtime can provide the current set of authenticators to the browser with a REST call. The URI for this call is `/.openapi/security` (unless configured otherwise). The result is a JSON aray with `OpenAPISecurityProviderInfo` objects. These objects provide sufficient information to create an automatic login page if so needed.
 
-* `biz.aQute.openapi.basicauth.provider` – Can accept the 
+### Included Authenticators
 
+The OpenAPI suite provides the following authenticators. Refer to their readme.md file for features and configuration information. These authenticators can be used in industrial applications since they are hardened against known attacks.
 
-### OAuth2 Authentication Provider
-
-### ApiKey Authentication Provider
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
------------------------
-
-
-
-
-
-* Type is Basic Authentication
-* Security definition name is `basicauth`
-
-The following bundles are required to provide an OpenAPI Service Provider and Authority service based on User Admin.
-
-* `biz.aQute.openapi.security.useradmin.provider` – Provides a configurable basic authentication provider. The key used in useradmin to find the given user name is configurable as is the salt and the hash used. It also provides a Gogo command to set and remove basic authentication ids and their hashed+salted password.
-* `biz.aQute.useradmin.util` – Provides an implementation of the OSGi enRoute Authority based on the OSGi User Admin. Also here with a Gogo command to manipulate the users in User Admin.
-
-## Authentication
-
-Authentication is the process of establishing a trusted identity for a user. The Internet has spawned thousands of protocols describing how to authenticate users. The OpenAPI suite defins the OpenAPI Authenticator service as an abstraction for these protocols. Although some protocols are simply userid password verifications like Basic Authentication, other protocols implement complex redirect flows. However, even Basic Authentication requires more than just answering a simple question. If the Authorization header is absent the server must request the credentials. For these reasons, the API for the OpenAPI Authenticator is not trivial. 
-
-## Permissions
-
-
-### Configuring Basic Authentication
-
-Create a new factory configuration for `biz.aQute.openapi.ua.basic`:
-
-|  Key    | Comment                               | Default value                 |
-|---------|---------------------------------------|-------------------------------|
-| `name`  | Name of the security provider.        | `basic-auth`                  |
-| `hash`  | Algorithm to hash the passwords       | `{ PLAIN, SHA,` **SHA_256**`,  SHA_512 }` |
-| `salt`  | salt to use for the hashing           | `byte[]{}`                    |
-| `idkey` | User Admin property key for id, when this is empty, the User id is used.   | `aQute.ua.id`                 |
-| `pwkey` | The key in the users credentials for hashed password  | `aQute.ua.pw`                 |
-
-The defaults should set you up ok. However, since this is a factory, you need to create it of course.
-
-In Gogo you can now setup a user:
-
-     G! basicauth -u u123456 some.user@example.com SECRET_PASSWORD
-     some.user@example.com
-{.shell}
-
+* `biz.aQute.openapi.basicauth.provider` – Implements the Http Basic Authentication protocol.
+* `biz.aQute.openapi.oauth2.provider` – Implements the OAuth2 protocol. Since OAuth2 is not an authentication protocol it requires a specific call to an authorized server to get authentication data. This bundle implements [OpenID Connect], an emerging standard that includes the authentication data in the OAuth2 response, and a number of well known authentication sites like Github and Google. 
 
 
 [1]: https://github.com/aQute-os/biz.aQute.openapi/tree/master/biz.aQute.openapi.basicauth.example
 [RFC 2617]: https://www.ietf.org/rfc/rfc2617.txt
 [Amazon Signing Version 4]: http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html
 [shiro]: https://shiro.apache.org/
+[OpenID Connect]: http://openid.net/connect/
