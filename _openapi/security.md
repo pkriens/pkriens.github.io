@@ -55,8 +55,8 @@ Basic Authentication has no parameters.
 During runtime, this will refer to a service with the following properties:
 
     objectClass     OpenAPIAuthenticator
-    name            basicauth
-    type            basic
+    openapi.name            basicauth
+    openapi.type            basic
 
 There should only be one `OpenAPIAuthenticator` service with these properties registered.
 
@@ -78,7 +78,9 @@ If no security requirement succeeds authentication, the first OpenAPI Authentica
 
 For example, Basic Authentication checks the Authorization header. If there is no such header it can request such a header by setting the WWW-Authenticate header and returning a 403 error code to the caller. The Basic Authentication OpenAPI Authenticator will there indicate that it is not authenticated but it could set the response to request credentials. If the OpenAPI Runtime cannot find another OpenAPI Authenticator that says it is authenticated it will ask the Basic Authentication OpenAPI Authenticator service to request the credentials.
 
-If in the end a security requirement and its `and` subling succeeds, the first security requirement in the OpenAPI source file is selectd to provide the authenticated user.
+If in the end a security requirement and its `and` subling succeeds, the first security requirement in the OpenAPI source file is selected to provide the authenticated user. 
+
+If no authenticated user can be established, the request is executed with the _anonymous user_. This is the user represented by `null`. That is, authentication will never prohibit calling the microservice implementation, microservices should always verify their required permissions.
 
 This sounds (and is) complicated. However, in most of the cases there is only a single security provider in play, which greatly simplifies the setup.
 
@@ -156,7 +158,7 @@ It would be simple to verify basic permissions using an annotation on the micros
 * Parameters – It is straightforward to pass dynamic parameters in the check, annotation can only access compile time information.
 * Readability – Plain old java is easier to read and understand than annotations that might perform a lot of magic.
 
-It would be possible to automatically check the user has permission to execute the OpenAPI operation id. File an enhancement if this is needed.
+It would be possible to automatically check the user has permission to execute the OpenAPI operation id. File an enhancement if this is needed. Also annotations, though not recommended, can be added if so needed.
 {:.note}
 
 ## The Open API Security Provider
@@ -168,14 +170,64 @@ Each Open API Security Provider service must register under the `OpenAPIAuthenti
 * `openapi.name` – The name as used in an OpenAPI specification for a `securityDefinition`. 
 * `openapi.type` – The OpenAPI Specification type name. This is `apiKey`, `oauth2`, or `basic`. The OpenAPI supports custom types but it is recommended to start these with `x-`.
 
-### The Authentication 
+### The Authentication Object
 
 The primary responsibility of the an OpenAPI Authenticator is to authenticate a web request. For this, the provider gets access to the full Http Servlet Request- and Response. Since the authentication is a multistage process due to the complexity of the the `and`/`or` combination of the OpenAPI specification security requirements, the OpenAPI Runtime requests an `Authentication` object from the OpenAPI Authenticator. This Authentication object is then used in a state machine to discover which provider can authenticate the request.
 
 The provider must implement the following methods:
 
 * `isAuthenticated` – Answers if the web request is authenticated, that is, the getUser() method returns an authenticated user.
-* `needsCredentials` – Some authenticators can 
+* `needsCredentials` – Some authenticators can tell the browser to provide credentials, for example this works for Basic Authentication. The authenticator sends a special header and a special error code. 
+* `requestCredentials` – If no authenticator can be found that has the user authenticated then the first authenticator that could request credentials gets control. This usually involves manipulating the Http Servlet Response to redirect or set headers and result codes.
+* `ignore` – Ignore this authentication object. The reason this is provided so that the authentication mechanism can be used to inspect headers. For example, this makes it possible to implement rate limiting schemes.
+
+### Login and Logout
+
+An authorization protocol like OAuth2 requires that the browser is redirected to an authorization server. This poses a problem for code that calls a REST API. Although code could request credentials from the user and then use a REST call to authenticate this forfeits the purpose of OAuth2 that no credentials nor personal information is ever passing through the _client_. (In OAuth2 terms, the client is the code that needs to perform actions for a given user.) The OAuth2 protocol achieves this by redirecting the browser to the _authorization server_. On that server, the user authenticates, and through another redirection a token is either given to the browser code (implict flow) or the client (code grant flow). These flows are 100% user based and do require that there is a human at the keyboard, REST calls can not help here.
+
+For this, every authenticator is accessible through a URI on the local server. 
+
+    /.openapi/security/<openapi.name>/<openapi.type>/<command>
+    
+The following commands are supported:
+
+* login – Start an authenticator specific login procedure. The URI can require authenticator specific parameters.
+* logout – Start an authenticator specific logout procedure. The URI can require authenticator specific parameters.
+* ... – Any other command is forwarded to the authenticator. This can, for example, be used for authentication callbacks like used in OAuth2.
+
+
+### Single Page Web Apps
+
+When an application is a single based web app this poses a problem. Redirection to another page closes the single page web app and this thereby loses its state, which can be expensive.
+
+A single page web app can hardcode the logins of the available authenticator in its GUI on a general login screen, like for example:
+
+![Stackoverflow Login Window](https://user-images.githubusercontent.com/200494/28422143-76ce71cc-6d67-11e7-9045-8ed5b2372858.png)
+
+If the user clicks on one of the authentication buttons the single page web app should open a new window or tab and set the location of that window to the proper URI of the authenticator login. For example, `/.openapi/security/google/oauth2/login`, assuming there is an OAuth2 authenticator configured for Google. 
+
+The OAuth2 Google authenticator will then redirect the window to the Google authorization page. Google will redirect to our authenticator and provides the token or an error. The authenticator then redirects the browser to a special _closing_ page. The closing page should close the login window. The actual URI for the closing page is always configurable for each authenticator. That said, it is likely that only one closing page is needed for a single page web app.
+
+Since the original single page web app is likely to be interested in the result of the login flow, the authenticator adds a number of parameters to the closing page URI. At least the following parameters are added:
+
+* `error` – An error code. This error code uses the OAuth2 defined error codes. If the flow succeeded then the error code witll be `ok`. Any custom error codes are prefixed with `x_`. 
+* `error_description` – A description of the error that happened.
+
+
+
+###     
+    
+
+Authenticators provided:
+
+* `biz.aQute.openapi.basicauth.provider` – Can accept the 
+
+
+### OAuth2 Authentication Provider
+
+### ApiKey Authentication Provider
+
+
 
 
 
