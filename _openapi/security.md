@@ -32,7 +32,7 @@ The OpenAPI specifications are moot on the _authorization_ aspects of writing mi
 
 The OpenAPI security architecture provides a pluggable system for the myriad of authentication and authorisation systems out there. It does this with a number of services. The service diagram is depicted in the following picture:
 
-![OpenAPI Security Diagram](![image](https://user-images.githubusercontent.com/200494/28419791-75045ff2-6d60-11e7-881e-9f7a473a46a7.png))
+![OpenAPI Security Diagram](https://user-images.githubusercontent.com/200494/28419791-75045ff2-6d60-11e7-881e-9f7a473a46a7.png)
 
 
 ## Security Definitions
