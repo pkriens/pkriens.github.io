@@ -72,7 +72,12 @@ h1, h2, h3, .title {
 
 .title {
 	font-size: 40px;
-	
+}
+
+td.title {
+  font-size: $base-font-size;
+  font-weight: bold;
+  color: $brand-color
 }
 
 .item {
