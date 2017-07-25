@@ -1,3 +1,10 @@
+---
+layout: openapi
+index: 0100
+title: The OpenAPI Suite
+description: Goal, scope, and span of the OpenAPI Suite including a workflow example
+---
+
 # The OpenAPI Suite
 
 ## Goal
