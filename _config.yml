@@ -30,3 +30,5 @@ exclude:
 collections:
   posts:
     output: true
+  openapi:
+    output: true
