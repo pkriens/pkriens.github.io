@@ -1,5 +1,11 @@
+---
+title: OpenAPI Suite Security
+description: An overview of the security architecture of the OpenAPI Suite
+index: 1000
+layout: openapi
+---
 
-# Open API Security
+# OpenAPI Security
 
 ## Introduction
 
