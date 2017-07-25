@@ -2,7 +2,7 @@
 layout: default
 ---
 
-<center><img src="/img/books.png"></center>
+<center><img src="https://user-images.githubusercontent.com/200494/28563350-01f8deb0-7126-11e7-9db5-873400a3662f.png"></center>
 
 ## Articles
 
