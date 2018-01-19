@@ -7,15 +7,17 @@ comments: true
 
 # Neural Nets & Tensor Flow
 
-Having a bit of time and  gotten curious to Tensor Flow from [Adrian Colyer's morning paper][1] I decided to renew my almost 30 year old acquaintance with neural networks. I was intrigued at at the end of the eighties  but forgot all about it since it was not feasible at the time for any serious problem. Today, with computers a million times faster the story is different. Especially with TensorFlow. TensorFlow is a large mathematical library that can execute the _tensor_ formula's remotely and on special hardware like Graphic Processing Units (GPU) and special Tensor Processing Units (TPU), reaching speeds a super computer of only a number of years ago would have been jealous. Tensors, by the way, are n-dimensional matrices. I.e. scalars, vectors, matrices, volumes, and so on.
+I had  gotten curious to [Tensor Flow][4] from [Adrian Colyer's morning paper][1]. Having a bit of time, I therefore decided to renew my almost 30 year old acquaintance with neural networks. At the end of the eighties I bought all the books but memories were dim; at the time it was no feasible for any serious problems. 
 
-I started with TensorFlow and that meant Python. Somehow Python and me will never become friends so I tried the Java API but that was an example of either a Python programmer illegally practising Java or a junior trainee that missed the day they taught Java at university. Stupid that I am, I set out to create my own wrapper.
+Today, with computers a million times faster the story is different. Especially with TensorFlow. TensorFlow is a large mathematical library that can execute the _tensor_ formula's remotely and on special hardware like Graphic Processing Units (GPU) and special Tensor Processing Units (TPU), reaching speeds a super computer of only a few years ago would have been jealous. (Tensors, by the way, are n-dimensional matrices. I.e. scalars, vectors, matrices, volumes, and so on.)
 
-Now, for the kids among us, don't try this at home. Never write a library (wrapper) when you're not intricately familiar with the subject at hand. Vaguely aware of this idea I decided to first do some refreshing. Ok, maybe get some fundamentals since I never deep dived in the math of neural networks 30 years ago. (Looking back in my old books, surprisingly little has changed though.) I found an online [book about neural networks][2] that looked good and it was referred to from the TensorFlow site. Dumb as I am, I decided to write my own Java classes and not follow the Python code, telling myself it was a good learning exercise. And boy, was I right. This blog recounts my adventures. Follow along at your own peril. For extra points, use the Java 9 JShell to make your own neural network with multiple layers.
+I started with the TensorFlow introductory tutorial and that meant _Python_. Somehow Python and I will never really become friends. I therefore tried the Java API but that was a result of either a Python programmer illegally practising Java or a junior trainee that missed the day that Java was taught at university. Stupid that I am, I set out to create my own wrapper.
+
+Now, for the kids among us, don't try this at home. Never write a library (wrapper) when you're not intricately familiar with the subject at hand. Vaguely aware of this idea I decided to first do some refreshing. Ok, maybe get some fundamentals since I never deep dived in the math of neural networks 30 years ago. (Looking back in my old books, surprisingly little has changed though.) I found an online [book about neural networks][2] that looked pretty thorough. Better, it was referred to from the TensorFlow site. Dumb as I am, I decided to write my own Java classes and not follow the Python code, telling myself it was a good learning exercise. And boy, was I right. This blog recounts my adventures. Follow along at your own peril. For extra points, use the Java 9 JShell to make your own neural network with multiple layers and teach it a NAND gate.
 
 ## Quick Guide into Neural Nets
 
-A neural net is number of _layers_ of _neurons_. Output of one neuron is relayed to the input of other neurons. The other neurons _weigh_ and _bias_ their inputs and then decide on an output value. This output value is either the final result when it is the output layer, or it is fed into the next layer. 
+A neural net is number of _layers_ of _neurons_. Output of one neuron is relayed to the input of other neurons in the next layer. The other neurons _weigh_ and _bias_ their inputs and then decide on an output value using a transformation function. This output value is either the final result, in the case of the output layer, or it is fed into the next layer. 
 
 I could now show a classic traditional picture of a neuronal network but that just does not work well for me. All those crossing lines are hurting my esthetic feelings. My mental model of a neuronal network is therefore the following picture:
 
@@ -33,9 +35,9 @@ With a simple neuronal network like this you could make weights and biases that 
      110     0010
      111     1000
 
-The picture shows a 3 layer network. (In the book this would be 4 since they count the input as a layer.) It is a 3-2-4 network. Each layer has an _input cardinality_ and an _output cardinality_. We call the input cardinality _#in_ and the output cardinality _#out_ in this blog, you will seem them used often. 
+The picture shows a 3 layer network. (In the book this would be 4 since they count the input as a layer.) It is a 3-2-4 network. Each layer has an _input cardinality_ and an _output cardinality_. We call the input cardinality _#in_ and the output cardinality _#out_, you will see them used quite often so try to understand how they relate. 
 
-The picture has a table where a cell holds the _weight_ of an input _j_ to a neuron _k_ in that layer. Not shown in the picture is the _bias_ that each neuron also has. For the input, a neuron multiplies each input with its special weight and sums them together and then adds the bias. We add to _z_, which we can call the raw input value.
+The picture has a _table_ where each cell holds the _weight_ of an input _j_ to a neuron _k_ in that layer. Not shown in the picture is the _bias_ that each neuron also has. For the input, a neuron multiplies each input with its special dedicated weight and then sums them together after which it adds the bias. The result is called _z_, which we can call the _raw input value_.
 
 I never really had any experience with matrix multiplications so I had to follow some courses on [Khan academy](https://www.khanacademy.org/math/precalculus/precalc-matrices) to get up to speed. Amazing stuff! When you structure your matrices and vectors correctly, you can do most of this weight multiplication and bias addition in two operations. If _W_ is the weight matrix, _b_ the bias vector, and _a_ is the input vector then we can say:
 
@@ -43,19 +45,27 @@ I never really had any experience with matrix multiplications so I had to follow
 
 ![image](https://user-images.githubusercontent.com/200494/35141713-36822ba2-fcfc-11e7-9099-2b14214bb6e3.png)
 
-Wow, deceptively simple. #not. Matrix multiplication is clearly not my grandmother's multiplication so I did some struggling. For other souls that never wrestled with it a short primer on matrix multiplication.
+Wow, deceptively simple. #not. Matrix multiplication is clearly not my grandmother's multiplication so I did some struggling. For other souls that never wrestled with it a short primer on matrix multiplication. Feel free to skip if you did pay attention during class.
 
 ## Short Primer on Matrices
 
-When you multiply 2 matrices A * B you end up with a matrix C that gets its number of rows from A and the number of columns from B. Oh yeah and the number of columns of A must equal the number of rows of B.
+When you multiply 2 matrices A * B you end up with a matrix C. C gets its number of rows from A's rows and the number of columns from B's columns. Oh yeah, the number of columns of A must equal the number of rows of B to make a multiplication possible.
 
       C.rows == A.rows
       C.cols == B.cols
       A.cols == B.rows
 
-Clearly, A * B != B * A. It is very important to watch the cardinality of the matrices and the order as I learned in this exercise. 
+Clearly then, A * B != B * A. It is very important to watch the cardinality of the matrices and the order as I learned in this exercise. 
 
-In this case, _a_ is a vector with the input values. This is actually a matrix with shape (#in x 1). That is _#in_ rows, and 1 column. So how should we store the weights _W_? If _W_ is shaped (#in x #out) then one cannot easily multiple it with _a_ which is shaped (#in x 1). That is, (#in x #out) * (#in x 1) is incorrect since the columns of _W_  (#out) do not match the rows of _a_ (#in). Therefore, we should make _W_ a matrix shaped (#out x #in). Now _Wa_ is well formed.
+![matrix multiplication](https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Matrix_multiplication_diagram_2.svg/313px-Matrix_multiplication_diagram_2.svg.png)
+
+A matrix A(#a,m) and B(#b,j) results in C(i,j) for i in 0..#a, and j in 0..#b. Each entry is given by multiplying the entries A(i,k) (across row i of A) by the entries B(k,j) (down column j of B), for k in 0..m, and summing the results over k. If this looks complicated, suggest you use the [Khan academy](https://www.khanacademy.org/math/precalculus/precalc-matrices) and checkout multiplication. 
+
+## Weight Matrix
+
+In this case, _a_ is a vector with the input values. A vector is actually also a matrix with shape (#in x 1). That is _#in_ rows, and 1 column. So how should we store the weights _W_? 
+
+If _W_ is shaped (#in x #out) then one cannot easily multiply it with _a_ which is shaped (#in x 1). That is, (#in x #out) * (#in x 1) is malformed since the columns of _W_  (#out) do not match the rows of _a_ (#in). Therefore, we should make _W_ a matrix shaped (#out x #in). Now _Wa_ is well formed.
 
       W( #out x #in ) * a( #in x 1) =>  z(#out x 1) 
       
@@ -331,3 +341,4 @@ It is this enormous speedup that allow today's networks to perform their impress
 [1]: https://blog.acolyer.org/
 [2]: http://neuralnetworksanddeeplearning.com/index.html
 [3]: http://search.maven.org/#artifactdetails%7Corg.jblas%7Cjblas%7C1.2.4%7Cjar
+[4]: https://www.tensorflow.org/
