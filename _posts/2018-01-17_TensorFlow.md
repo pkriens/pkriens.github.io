@@ -346,6 +346,8 @@ It is this enormous speedup that allow today's networks to perform their impress
 
 [@pkriens](https://twitter.com/pkriens)
 
+_Thanks for [Michael Nielsen](http://michaelnielsen.org/) for both his book and the nice pictures on his website that I shamefully 'borrowed'._
+
 [1]: https://blog.acolyer.org/
 [2]: http://neuralnetworksanddeeplearning.com/index.html
 [3]: http://search.maven.org/#artifactdetails%7Corg.jblas%7Cjblas%7C1.2.4%7Cjar
