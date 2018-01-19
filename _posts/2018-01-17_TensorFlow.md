@@ -59,13 +59,13 @@ Clearly then, A * B != B * A. It is very important to watch the cardinality of t
 
 ![matrix multiplication](https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Matrix_multiplication_diagram_2.svg/313px-Matrix_multiplication_diagram_2.svg.png)
 
-A matrix A(#a,m) and B(#b,j) results in C(i,j) for i in 0..#a, and j in 0..#b. Each entry is given by multiplying the entries A(i,k) (across row i of A) by the entries B(k,j) (down column j of B), for k in 0..m, and summing the results over k. If this looks complicated, suggest you use the [Khan academy](https://www.khanacademy.org/math/precalculus/precalc-matrices) and checkout multiplication. 
+A matrix A(#a,m) and B(#b,j) results in C(i,j) for i in 0..#a, and j in 0..#b. Each entry is given by multiplying the entries A(i,k) (across row i of A) by the entries B(k,j) (down column j of B), for k in 0..m, and summing the results over k. If this looks complicated, suggest you use the [Khan academy](https://www.khanacademy.org/math/precalculus/precalc-matrices) and checkout multiplication. Just remember, basically the incoming values are multiplied with all the cells and summed to create an output value.
 
 ## Weight Matrix
 
-In this case, _a_ is a vector with the input values. A vector is actually also a matrix with shape (#in x 1). That is _#in_ rows, and 1 column. So how should we store the weights _W_? 
+In this case, _a_ is a vector with the input values. A vector is actually also a matrix with shape (#in x 1). (They are both _tensors_.) That is _#in_ rows, and 1 column. So how should we store the weights in _W_? 
 
-If _W_ is shaped (#in x #out) then one cannot easily multiply it with _a_ which is shaped (#in x 1). That is, (#in x #out) * (#in x 1) is malformed since the columns of _W_  (#out) do not match the rows of _a_ (#in). Therefore, we should make _W_ a matrix shaped (#out x #in). Now _Wa_ is well formed.
+If _W_ is shaped (#in x #out) then one cannot easily multiply it with _a_ which is shaped (#in x 1). That is, (#in x #out) * (#in x 1) is malformed since the columns of _W_  (#out) do not match the rows of _a_ (#in). Therefore, we should make _W_ a matrix shaped (#out x #in). Now _Wa_ is a well formed multiplication.
 
       W( #out x #in ) * a( #in x 1) =>  z(#out x 1) 
       
@@ -80,7 +80,9 @@ A concrete example where we have a 3-2 layer. I.e. we get 3 inputs and create 2 
               W(2x3)
               0.50   -0.5   0.30    0.29  z(2x1)
               0.10    0.2  -0.10    0.04
-           
+
+## JShell
+
 You can try this out in the Java 9 JShell! I am using the `org.jblas` as matrix library you can find on [Maven Central][3]. 
 
       jshell> import org.jblas.*
@@ -91,13 +93,15 @@ You can try this out in the Java 9 JShell! I am using the `org.jblas` as matrix 
       jshell> W.mmul(a)
       $6 ==> [0.290000; 0.040000]
 
+If you use the JSHell, it is easiest to call up an editor with `/edit`. You can then paste the code and `Accept` it. My MacOS shell was not very good in accepting pasted code. Later you can do `/edit Network` or `/edit MiddleLayer` to edit the class.
+
 ## Output
 
-Every neuron has a _function_ that takes the weighted and biased input _z_ and turns it into an output. The first models used a _threshold_ model. If the weighted input of a row in _z_ was above a threshold, the corresponding output was 1 and otherwise 0. The diagram for this neuron transform function is:
+Every neuron has a _function_ that takes the weighted and biased raw input _z_ and turns it into an output. The first neuronal models used a _threshold_ function. If the weighted input of a row in _z_ was above a threshold, the corresponding output was 1 and otherwise 0. The diagram for this neuron transform function is:
 
 ![image](https://user-images.githubusercontent.com/200494/35114037-b6a5e98c-fc83-11e7-83ae-df8e0774b7e3.png)
 
-Unfortunately, such a function has the problem that a network can easily get unstable. A small change in weight, bias, or input can have a tremendous effect on the output, especially with multiple layers, when the raw input z is close to the threshold. Therefore, the _sigmoid_ function, to impress we'll use σ for this, works much better because it has a _gradual_ threshold. It has the following graph:
+Unfortunately, such a function has the problem that a network can easily get unstable. A small change in weight, bias, or input can have a tremendous effect on the output, especially with multiple layers or when the raw input z is close to the threshold. Therefore, the _sigmoid_ function, to impress we'll use the fancy symbol σ for the name of this function, works much better because it has a _gradual_ threshold. It has the following graph:
 
 ![image](https://user-images.githubusercontent.com/200494/35114469-296b4e48-fc85-11e7-8f2c-b6f865de40bb.png)
 
@@ -105,11 +109,9 @@ Or in formula form:
 
 ![equation](http://www.sciweavers.org/tex2img.php?eq=%20%5Cfrac%7B1%7D%7B1%20%2B%20%20e%5E%7B-z%7D%20%7D%20&bc=White&fc=Black&im=png&fs=12&ff=arev&edit=0)
 
-## JShell
+It should be clear, but to be sure. z is a vector so the function σ(z) must accept a vector and return one.
 
-If you use the JSHell, it is easiest to call up an editor with `/edit`. You can then paste the code and `Accept` it. My MacOS shell was not very good in accepting pasted code. Later you can do `/edit Network` or `/edit MiddleLayer` to edit the class.
-
-## Middle Layer
+## API
 
 As always, first the API! Never without an API is the primary lesson I learned as a developer.  Always API, even if what we're doing seems trivial.
 
@@ -119,7 +121,9 @@ The API for a layer looks like:
 		FloatMatrix activate(FloatMatrix x);
 	}
 
-The Middle Layer needs to transform the input vector `a` to an input in the next layer, we call this `a'`. For this transformation we need the following class:
+## Middle Layer
+
+The Middle Layer needs to transform the input vector a to an output a', which is the input for the next layer. For this transformation we need the following class:
 
 	class MiddleLayer implements Layer {
 	
@@ -147,7 +151,7 @@ The Middle Layer needs to transform the input vector `a` to an input in the next
 
 We initialize the W matrix and the b vector with random numbers between 0..1. This works better when we later train the network. 
 
-The `activate` method propagates the result of that layer, a', to the next layer, and the last 'layer' is actually the network that returns the value. The value at the end is the prediction made by the layers.
+The `activate` method propagates the result of that layer, the output value a', to the next layer, and the last 'layer' is actually the network that will just return. This value at the end is actually the prediction made by the layers.
 
 ## Programming the Layer
 
@@ -171,9 +175,9 @@ We use a `Network` class to hold the different layers together:
 		}
       	}
 
-Notice that the Network objects act as the last layer so we can take special action and let the MiddleLayer be just concerned about being, eh, a layer. This is generally a sign of a good cohesive design.
+Notice that the Network objects act as the last layer so we can take special action and let the Middle Layer be just concerned about being, eh, a middle layer. This is generally a sign of a good cohesive design if you do not need a special case.
 
-The constructor creates a number of _linked layers_. The #out of the previous layer's output is the #in of the next layer. For a network of 3-4-2, i.e. `new Network( 3,4,2)`. The network would look like:
+The Network constructor creates a number of _linked layers_. The #out of the previous layer's output is the #in of the next layer. For a network of 3-4-2, i.e. `new Network( 3,4,2)`, The layers would look like:
 
       	Layer input = new MiddleLayer(3,4,new MiddleLayer(4,2, this)); // don't paste this in JSHell
 
@@ -183,50 +187,54 @@ Or as a picture:
 
 ## Testing
 
-Clearly this network will return a value but it will be random because we've initialized the weight and the bias to random numbers. However, from an infrastructure it is nice to get a short test case.
+Clearly this network will return a value but it will be random because we've initialized the weight and the bias to random numbers. No training has taken place. However, from an infrastructure point of view it is nice to get a short test case.
 
 In the shell we can now create a simple network and ask for the activation.
 
-	>Network n = new Network(2,1)
+	> Network n = new Network(2,1)
 	n ==> Network@63440df3
 	> n.input.activate( FloatMatrix.valueOf("1;1") )
 	$33 ==> [0.838629]
 	> n.input.activate( FloatMatrix.valueOf("1;0") )
 	$34 ==> [0.715076]
 
-Clearly not very useful values! But that was to be expected since we've not trained the network yet. However, we know that at least we got the matrix dimensions right since there is no exception.
+Clearly not very useful values! But that was to be expected since we've not trained the network yet. However, we know that at least we got the matrix dimensions right since there is no exception. (That did take some effort!)
 
 ## Training a Network
 
-To train the network we need provide inputs and the expected outputs. A training algorithm will then adjust the weights W and the biases b. As always, there are many ways to skin a cat. The TensorFlow library has many different algorithms that implement different training algorithms. 
+To train the network we need provide inputs and the expected outputs. A training algorithm will then adjust the weights W and the biases b. As always, there are many ways to skin a cat. The TensorFlow library has many different algorithms that implement different training algorithms but they are all implemented in Python. 
 
-However, in this example we use a _back propagation_ algorithm. This means that we predict a value just like with the `activate` method. However, when we are at the last Middle Layer, we calculate an error δ. (Just showing off I can use Unicode characters!.)  δ is a vector of shape (#out x 1). I.e. we have an error fvalue or each separate neuron in δ. To calculate  δ we need a _cost_ function whose value depens on how far off we are from the goal. We then try to find a change in W and b that moves us to a place that has a (slightly) lower cost. It is a bit like being on a n-dimensional plane and for each dimension you try to make a tiny little step _down_ until you reach the lowest place. Visually for 2 dimensions it is a valley. Consider you're somewhere on the slopes, then as long as you go a little bit down in the left and right direction you should get to the lowest point in the valley.
+In this example we use a _back propagation_ algorithm since it is pretty straightforward. 
+
+Back propagation means that we predict a value just like with the `activate` method. However, when we are at the last Middle Layer, we calculate an error δ. (Unicode characters are great!), a vector of shape (#out x 1). I.e. we have an error value for each separate neuron in δ. 
+
+To calculate  δ we need a _cost_ function whose value depends on how far off we are from the goal, the expected value. We then try to find a change in W and b that moves us to a place that has a (slightly) lower cost. It is a bit like being on a n-dimensional plane and for each dimension you try to make a tiny little step _down_ until you finally reach the lowest place. Visually for 2 dimensions it is a valley. Consider you're somewhere on the slopes, then as long as you go a little bit down in the left and right direction you should get to the lowest point in the valley finally.
 
 ![image](http://neuralnetworksanddeeplearning.com/images/valley.png)
 
-If x is the input vector from the training set and y(x) is the last a vector in the network for x then a cost function that works well for our network is (a' is the calculated output value, the input value for the _next_ layer):
+If x is the input vector from a training set and y(x) is the desired value then a cost function that works well for our network is (a' is the calculated output value, the input value for the _next_ layer):
 
 	C(a') = ( y(x) - a' )^2
 
-Clearly, we've reached 0 cost when y(x) = a. The trick now is to change W and b in such a way the error _decreases_ in a controlled way. The algorithm that is used here is called _gradient descent_. For each neuron, it calculates where it is on the cost curve and then tries to establish the direction to move to that makes the cost less, preferably zero. 
+Clearly, we've reached 0 cost when y(x) = a. The trick now is to change W and b in such a way the error _decreases_ in a controlled way. The algorithm that is used here is called _gradient descent_. For each neuron, it calculates where it is on the cost curve and then tries to establish the direction to move the weights and bias to that makes the cost a bit less so we end up at zero cost. 
 
-How does it know that direction? Well, it can derive the cost function and see what the direction of the curve is at the point it is for any value of C(a'). If the derivative is positive at a' then we want a' to be a bit smaller so we move left on the cost curve, if the derivative is negative, we should move to the right and we therefore want a' to increase a tad. Remember your calculus? 
+How does it know that direction? Well, it can _derive_ the cost function and see what the direction of the curve is for the current value C(a'). If the derivative is positive at a' (curve goes up) then we want a' to be a bit smaller so we move left and thus down on the cost curve, if the derivative is negative (line curves down), we should move to the right and we therefore want a' to increase a tad. Remember your calculus? 
 
 ![image](https://user-images.githubusercontent.com/200494/35147359-95607770-fd0e-11e7-8bbb-0e9183d959af.png)
 
-The derivative of `( y(x) - a' )^2` on `a'` is  `2( y(x) - a') ~ y(x) - a'`. We can ignore the constant 2 since we're looking for the direction to move, not an absolute value. We therefore define the derived cost of a':
+The derivative of `( y(x) - a' )^2` on `a'` is  `2( y(x) - a') ~ y(x) - a'`. We can ignore the constant 2 since we're looking for the direction to move, not an absolute value. We therefore define the derived cost of a' when we know the predicted value a' and the expected value x:
 
 	ΔC = a' - y(x)
 
-However! We're not there. The sigmoid function σ could throw another wrench in our calculations since it could negate the direction. I.e. a positive change in W might be turned into a negative change by the neuron function we use. We therefore must also calculate the derivative of the σ function and multiply this with ΔC to make sure we actually move in the desired direction when we change W and b. Therefore:
+However! We're not there. The sigmoid function σ could throw another wrench in our calculations since it could also reverse the direction. I.e. a positive change in W might be turned into a negative change by the neuron function we use. (Not for the sigmoid, but it _could_ for another function.) We therefore must also calculate the derivative of the σ function and multiply this with ΔC to make sure we actually move in the desired direction when we change W and b. Therefore:
 
 	ΔC = a' - y(x)
 	Δa = Δσ(z)
 	δ = ΔC x Δa   // NOT a matrix multiplication but multiplies per row, like δ[i] = ΔC[i] x Δa[i]
 
-To ensure that we make small steps so that we do not overshoot local minima in our cost valley or start to oscillate, we have a learning factor η. This is small value that controls the learning rate. The higher the bigger the steps down the cost valley but the easier it overshoots. I.e. a step could become so big that you step across the valley.
+To ensure that we make small steps so that we do not overshoot local minima in our cost valley, or start to oscillate, we have a factor η. This is small value that controls the learning rate. The higher this factor η, the bigger the steps down the cost valley but the easier it will overshoot. I.e. a step could become so big that you step across the bottom of the valley straight to the other side.
 
-The sign of δ now ensures that any change we make to W and b will actually move us in the right direction to lower the cost function. The actual value is not so relevant because we cannot make big steps anyway. Each training step should only marginally modify W and b, it is the repetition and all the other samples that then statistically (well stochastically) moves the W and b to values that move the output so that the cost decreases. We therefore multiple our changes with a smal value, the training value η. This value must make sure each sample only has a small influence on the total outcome for all samples.
+The sign of δ now ensures that any change we make to W and b will actually move us in the right direction to lower the cost function. The actual value is not so relevant because we cannot make big steps anyway. Each training step should only marginally modify W and b, it is the repetition and all the other samples that then statistically (well stochastically) moves the W and b to values so that the cost decreases. 
 
 We now can calculate the delta to W and b. For W we multiple the error with the input because the weights are multiplied. For b we just add the error since the bias is only an offset.
 
@@ -235,17 +243,21 @@ We now can calculate the delta to W and b. For W we multiple the error with the 
 	W = W + ΔW
 	b = b + Δb
 
-This describes the last Middle Layer but the other Middle Layers are very similar. The only difference is how they get their ΔC. For the last layer it is clear, the training set provide us a value. The earlier layers do not have a provided value, we need to calculate the ΔC for the previous layer by do a _reverse transformation_ through W from our error δ. We need some more matrix magic here. To go back through a matrix we can transpose it and then multiple. 
+This described the last Middle Layer. However, the other Middle Layers are very similar. The only difference is how they get their ΔC or cost function. For the last layer it was clear, the training set provides us with a value. The earlier layers do not have a provided value, we therefore need to calculate the ΔC for the previous layer by doing a _reverse transformation_ through W from our error δ. We need some more matrix magic here. To go backwards through a matrix we can transpose it and then multiply it with the value. 
 	
-	W.transpose() * δ
+	ΔC = W.transpose() * δ
 
 Transpose exchanges the columns and the rows. This is necessary to line up the matrix multiplication with the error δ that has a shape of #out x 1. I.e. the shapes are as follows
 
 	W(#out x #in).transpose()(#in x #out) * δ(#out x 1) => (#in x 1)
 
-Clearly, the result is a vector that has the proper output size of the previous layer as one can expect. We ignore the bias in this case since we work with derivatives and the bias is a constant.
+Clearly, the result ΔC is a vector that has the proper output size of the previous layer as one can expect. We ignore the bias in this case since we work with derivatives and the bias is a constant.
 
-We pass this value by returning it from the learn method.
+To summarize. We've defined the layers recursively. Each layer calculates an activation util we reach the last layer, which in our case is the Network object. When we reach the network, we calculate the error ΔC based on the cost function and the expected value. This value is returned as the next layer's ΔC. The previous layer then calculates its error δ from the next layer's ΔC. It adjusts the weights, and the returns its ΔC which is the error transformed backwards to its input. 
+
+In an action diagram:
+
+![image](http://www.plantuml.com/plantuml/png/SoWkIImgAStDuGfLqBLJy35Ki5B8IKqiojD8rAdKv0BoOQA9whQ9oIKQYN118uHITR1Q8xXmeZfKiJfCs0z9CLYrdm9C-DmKPmLRa1O5NGM5IgW4s9YYr9BIeZoG0cJ3anDpaXNERK6nBoLBeJmrCpsZf1WcR8Yc7-4Hk7ualo7h1mk7ecftICrB0GOI0000)
 
 ## Implementation Learning
 
@@ -333,10 +345,6 @@ It is this enormous speedup that allow today's networks to perform their impress
 
 
 [@pkriens](https://twitter.com/pkriens)
-
-
-
-
 
 [1]: https://blog.acolyer.org/
 [2]: http://neuralnetworksanddeeplearning.com/index.html
