@@ -1,4 +1,3 @@
-
 ---
 title: "Neural Nets & Tensor Flow"
 layout: post
@@ -20,13 +19,27 @@ A neural net is number of layers of neurons. Output of one neuron is relayed to 
 
 ![image](https://user-images.githubusercontent.com/200494/35111009-7ed3c104-fc7a-11e7-96cc-3665f06bb792.png)
 
-The picture shows a 3 layer network. (In the book this would be 4 since they count the input as a layer.) It is a 3-2-4 network. Each layer has an _input cardinality_ and an _output cardinality_. We call the input cardinality _#in_ and the output cardinality _#out_.
+With a simple neuronal network like this you could make weights and biases that would, for example, show the number of one bits in the input on the output.
 
-has a table where a cell holds the _weight_ of an input _j_ to a neuron _k_ in that layer. Not shown in the picture is the _bias_ that each neuron has. For the input, a neuron multiplies each input with its special weight and sums them together and then adds the bias. We all this raw input value to the neuron _z_.
+     Input   Output
+     000     0000
+     001     0001
+     010     0001
+     011     0010
+     100     0001
+     101     0010
+     110     0010
+     111     1100
+
+The picture shows a 3 layer network. (In the book this would be 4 since they count the input as a layer.) It is a 3-2-4 network. Each layer has an _input cardinality_ and an _output cardinality_. We call the input cardinality _#in_ and the output cardinality _#out_. 
+
+The picture has a table where a cell holds the _weight_ of an input _j_ to a neuron _k_ in that layer. Not shown in the picture is the _bias_ that each neuron has. For the input, a neuron multiplies each input with its special weight and sums them together and then adds the bias. We all this raw input value to the neuron _z_.
 
 I never really had any experience with matrix multiplications so I had to follow some courses on Khan academy to get up to speed. Amazing stuff! When you structure your matrices and vectors correctly, you can do most of this in two operations. If _W_ is the weight matrix, _b_ the bias vector, and _a_ is the input vector into a layer then we can say:
 
       z = Wa + b
+
+![image](https://user-images.githubusercontent.com/200494/35141713-36822ba2-fcfc-11e7-9099-2b14214bb6e3.png)
 
 Wow, deceptively simple. Not. Matrix multiplication is clearly not my grandmother's multiplication so I did some struggling. For other souls that never wrestled with it a short primer on matrix multiplication.
 
@@ -40,8 +53,13 @@ When you multiply 2 matrices A * B you end up with a matrix C that gets its numb
 
 Clearly, A * B != B * A. It is very important to watch the cardinality of the matrices and the order. 
 
-In this case, _a_ is a vector with the input values. This is actually a matrix of _#in_ x 1. That is _#in_ rows, and 1 column. So how should we store the weights _W_? If _W_ is #in x #out then cannot easily multiple it with _a_ which is #in x 1. That is, (#in x #out) * (#in x 1) is incorrect since the columns of _W_ do not match the rows of _a_. Therefore, we should make _W_ a matrix (#out x #in). Now _Wa_ is well formed and gives us a (#out x 1) vector, which exactly the dimension we need because each row now holds the value for a single neuron! Magic.
+In this case, _a_ is a vector with the input values. This is actually a matrix of _#in_ x 1. That is _#in_ rows, and 1 column. So how should we store the weights _W_? If _W_ is shaped (#in x #out) then one cannot easily multiple it with _a_ which is shaped (#in x 1). That is, (#in x #out) * (#in x 1) is incorrect since the columns of _W_  (#out) do not match the rows of _a_ (#in). Therefore, we should make _W_ a matrix shaped (#out x #in). Now _Wa_ is well formed and gives us a 
 
+      W( #out x #in ) * a( #in x 1) =>  z(#out x 1) 
+      
+The dimensions of z are exactly the dimensions we need as input to our neurons! Magic.
+
+A concrete example:
 
                                     a(3x1)
                                     0.50
@@ -67,25 +85,54 @@ Every neuron has a _function_ that takes the weighted and biased input _z_ and t
 
 ![image](https://user-images.githubusercontent.com/200494/35114037-b6a5e98c-fc83-11e7-83ae-df8e0774b7e3.png)
 
-Unfortunately, such a function has the problem that a network quickly gets unstable. A small change in weight or input can have a tremendous effect on the output, especially with multiple layers. Therefore, the _sigmoid_ function σ works much better. 
+Unfortunately, such a function has the problem that a network can get unstable. A small change in weight or input can have a tremendous effect on the output, especially with multiple layers, when the weighted input a (z) is close to the threshold. Therefore, the _sigmoid_ function, to impress you we'll use σ, works much better because it has a gradual threshold. It has the following graph:
 
+![image](https://user-images.githubusercontent.com/200494/35114469-296b4e48-fc85-11e7-8f2c-b6f865de40bb.png)
 
-These neurons can then act as inputs to the next layer or used as is. A crucial aspect to understand is that each layer has a cardinality for the input and a cardinality for the output, and these can differ. (Extremely frustrating is that the referenced book and many other examples used layers of the same number of inputs and outputs.)
+The σ (sigmoid) function handles large negative and large positive values by clipping them to 0 and 1. It is most sensitive to change around 0. We can program the function in Java as follows:
 
-In the book I referred to this would be a 3 layer network because the input is also treated as a layer. I decided to slightly remodel it because it gives a much nicer objec oriented model. Each layer receives an input, calculates an output, and forwards it to the next layer. The last layer's outputs are the result.
+      static final FloatMatrix ONE = FloatMatrix.scalar(1);
+      
+	static FloatMatrix σ(FloatMatrix vector) {
+		return ONE.div(ONE.add(MatrixFunctions.exp(vector.neg())));
+	}
 
-With a simple neuronal network like this you could make weights and biases that would, for example, show the number of one bits in the input on the output.
+## Programming the Layer
 
-     Input   Output
-     000     00
-     001     01
-     010     01
-     011     10
-     100     01
-     101     10
-     110     10
-     111     11
+As always, first the API! Never without an API.  The API for the layer looks like:
 
+      interface Layer {
+            FloatMatrix activate(FloatMatrix x);
+      }
+
+We use a `Network` class to hold the different layers:
+
+      public class Network implements Layer {
+            Layer input;
+
+            public Network(int... shape) {
+                  int last = shaoe.length - 1;
+                  this.input = this;
+                  for (int x = last; x > 0; x--) {
+                        this.input = new MiddleLayer(sizes[x - 1], sizes[x], x, this.input);
+                  }
+            }
+
+            @Override
+            public FloatMatrix activate(FloatMatrix x) {
+                  return x;
+            }
+      }
+
+Notice that the Network objects act as the last layer so we can take special action and let the MiddleLayer be just concerned about being a layer.
+
+The constructor creates a number of linked layers. The #out of the previous layer's output is the #in of the next layer. For a network of 3-4-2, i.e. `new Network( 3,4,2)`. The network would look like:
+
+      Layer input = new MiddleLayer(3,4,new MiddleLayer(4,3, this));
+
+Or as a picture:
+
+![image](https://user-images.githubusercontent.com/200494/35142843-eb2fd8a8-fcff-11e7-9822-0974d8c46995.png)
 
 
 
