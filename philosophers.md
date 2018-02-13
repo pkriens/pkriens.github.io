@@ -33,7 +33,7 @@ such that no philosopher will starve; i.e., each can forever continue to alterna
 between eating and thinking, assuming that no philosopher can know when others may 
 want to eat or think.
 
-![Illustration of the Dining Philosophers problem](https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/An_illustration_of_the_dining_philosophers_problem.png/220px-An_illustration_of_the_dining_philosophers_problem.png)
+![Illustration of the Dining Philosophers problem][https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/An_illustration_of_the_dining_philosophers_problem.png/220px-An_illustration_of_the_dining_philosophers_problem.png]
 
 
 ## Alloy Model
@@ -48,7 +48,6 @@ The line `open util/ordering[Table]` orders all possible Table atoms, we will us
 later when we create a trace.
 
 ```alloy
-
 	open util/ordering[Table]
 	
 	sig Table {
@@ -56,7 +55,6 @@ later when we create a trace.
 	}
 
 	sig Fork {}
-
 ```
 
 
@@ -74,7 +72,6 @@ the right fork of a Philosopher is the left fork of its next neighbour.
 	} {
 		right = next.@left
 	}
-
 ```
 
 Currently the Philosophers are not yet nicely seated on a round table. To enforce 
@@ -86,10 +83,9 @@ To make it more readable, we create a macro that defines this 'ringness' aspect.
 it is only used once, it makes for easier to read specs.
 
 ```alloy
-
 	let ring[group] = all member : group | member.^next = group
 
-```	
+```
 
 We also must ensure that Philosophers all have their own fork. We ensure this
 by forcing the left and right relations _bijections_. That is, each Philosopher
@@ -102,12 +98,10 @@ The `bijective` macro is defined at the end of this specification.
 We can then combine these facts in an Alloy `fact`:
 
 ```alloy
-
 	fact Ring {
 		ring[P]
 		bijective[left] and bijective[right]
 	}
-
 ```
 
 ## Philosopher Actions
@@ -126,7 +120,6 @@ Each macro starts with a precondition. If this is true, it updates the next tabl
 a utility macro.
 
 ```alloy
-
 	let take[ philosopher, fork, table, table'] {
 		no table.setting.fork
 		table'.update[ table.setting + philosopher -> fork ]
@@ -138,7 +131,6 @@ a utility macro.
 			table'.update[ table.setting - philosopher->forks ]
 		}
 	}
-
 ```
 
 For the `wait` method we need some extra thinking. If the wait is a valid step then
@@ -149,26 +141,23 @@ which is not wait. We make that distinction by passing either the next table or 
 The wait macro only works when we pass next Table.
 
 ```alloy
-
 	let wait[p,table,tableOrNone'] = {
 		one tableOrNone'
 		tableOrNone'.setting = table.setting
 	}
 
 	let update[table',settings'] = no table' or table'.setting=settings'
-
 ```
 
 We now create a `step` function that reflects the steps that a Philosopher can take
 at any moment in time.
 
 ```alloy
-
 pred step[ philosopher : P, table : Table, table' : lone Table ] {
 		philosopher.take[ philosopher.left, 	table, table' ]
 	or 	philosopher.take[ philosopher.right, 	table, table' ]
-	or	philosopher.eat[ 						table, table' ]
-	or  philosopher.wait[						table, table' ]
+	or	philosopher.eat[ 			table, table' ]
+	or  philosopher.wait[				table, table' ]
 
 }
 ```
@@ -186,7 +175,6 @@ In the trace we always pass a next Table so a valid trace is only Philosophers
 waiting.
 
 ```alloy
-
 	fact trace {
 	
 		no first.setting
@@ -194,7 +182,6 @@ waiting.
 		all table : Table - last | 
 			some p : P | p.step[ table, table.next ]
 	}
-
 ```
 
 
@@ -203,9 +190,7 @@ waiting.
 We can now run the model for 4 Philosophers. 
 
 ```alloy
-
 	run { #P = 4 } for 4
-
 ```
 
 ## Liveliness
@@ -214,14 +199,9 @@ We also want to see if when the deadlock happens. This happens when no Philosoph
 can do a step excluding the `wait` step.
 
 ```alloy
-
-	
 	assert Liveliness {
 		no table : Table | no philosopher : P | philosopher.step[table,none]
 	}
-	
-	
-	
 	check Liveliness for 5 but exactly 4 P, 4 Fork, 4 int
 ```
 
@@ -230,8 +210,8 @@ can do a step excluding the `wait` step.
 And a few helper macros
 
 ```alloy
-
 	let bijective[relation] = ( all d,r : univ | d.relation = r <=> relation.r = d )
 	let domain[ relation ] 	= relation.univ
 	let range[  relation ] 	= univ.relation
+```
 
