@@ -33,7 +33,7 @@ such that no philosopher will starve; i.e., each can forever continue to alterna
 between eating and thinking, assuming that no philosopher can know when others may 
 want to eat or think.
 
-![Illustration of the Dining Philosophers problem](https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/An_illustration_of_the_dining_philosophers_problem.png/220px-An_illustration_of_the_dining_philosophers_problem.png)
+![Illustration of the Dining Philosophers problem][https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/An_illustration_of_the_dining_philosophers_problem.png/220px-An_illustration_of_the_dining_philosophers_problem.png]
 
 
 ## Alloy Model
@@ -57,7 +57,9 @@ later when we create a trace.
 
 	sig Fork {}
 
-```alloy
+```
+
+
 
 Each Philosopher has a neighbour _next_. We define a left and a right fork, where 
 the right fork of a Philosopher is the left fork of its next neighbour.
@@ -73,7 +75,7 @@ the right fork of a Philosopher is the left fork of its next neighbour.
 		right = next.@left
 	}
 
-```alloy
+```
 
 Currently the Philosophers are not yet nicely seated on a round table. To enforce 
 this, we need to make sure that they are placed in a _ring_. We can define this
@@ -87,7 +89,7 @@ it is only used once, it makes for easier to read specs.
 
 	let ring[group] = all member : group | member.^next = group
 
-```alloy
+```	
 
 We also must ensure that Philosophers all have their own fork. We ensure this
 by forcing the left and right relations _bijections_. That is, each Philosopher
@@ -106,7 +108,7 @@ We can then combine these facts in an Alloy `fact`:
 		bijective[left] and bijective[right]
 	}
 
-```alloy
+```
 
 ## Philosopher Actions
 
@@ -137,7 +139,7 @@ a utility macro.
 		}
 	}
 
-```alloy
+```
 
 For the `wait` method we need some extra thinking. If the wait is a valid step then
 we cannot detect deadlock. Deadlock is really when no Philosopher can make either eat
@@ -155,7 +157,7 @@ The wait macro only works when we pass next Table.
 
 	let update[table',settings'] = no table' or table'.setting=settings'
 
-```alloy
+```
 
 We now create a `step` function that reflects the steps that a Philosopher can take
 at any moment in time.
@@ -165,11 +167,11 @@ at any moment in time.
 pred step[ philosopher : P, table : Table, table' : lone Table ] {
 		philosopher.take[ philosopher.left, 	table, table' ]
 	or 	philosopher.take[ philosopher.right, 	table, table' ]
-	or	philosopher.eat[ 			table, table' ]
-	or  philosopher.wait[				table, table' ]
+	or	philosopher.eat[ 						table, table' ]
+	or  philosopher.wait[						table, table' ]
 
 }
-```alloy
+```
 
 We now get to the heart of the model, the trace. A trace is a fact that takes an
 ordered state (Table in our case) and ensures there is a defined initial state
@@ -193,7 +195,8 @@ waiting.
 			some p : P | p.step[ table, table.next ]
 	}
 
-```alloy
+```
+
 
 ## Running
 
@@ -203,7 +206,8 @@ We can now run the model for 4 Philosophers.
 
 	run { #P = 4 } for 4
 
-```alloy
+```
+
 ## Liveliness
 
 We also want to see if when the deadlock happens. This happens when no Philosopher
@@ -219,7 +223,7 @@ can do a step excluding the `wait` step.
 	
 	
 	check Liveliness for 5 but exactly 4 P, 4 Fork, 4 int
-```alloy
+```
 
 ## Helper Macros
 
