@@ -1,5 +1,6 @@
 ---
-
+title : Dining Philosopher's Problem
+layout: default
 ---
 
 ## Dining Philosophers Problem
@@ -33,7 +34,7 @@ such that no philosopher will starve; i.e., each can forever continue to alterna
 between eating and thinking, assuming that no philosopher can know when others may 
 want to eat or think.
 
-![Illustration of the Dining Philosophers problem][https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/An_illustration_of_the_dining_philosophers_problem.png/220px-An_illustration_of_the_dining_philosophers_problem.png]
+![Illustration of the Dining Philosophers problem](https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/An_illustration_of_the_dining_philosophers_problem.png/220px-An_illustration_of_the_dining_philosophers_problem.png)
 
 
 ## Alloy Model
