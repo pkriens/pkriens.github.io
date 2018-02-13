@@ -11,7 +11,7 @@ resolving them.
 
 It was originally formulated in 1965 by Edsger Dijkstra as a student exam exercise, 
 presented in terms of computers competing for access to tape drive peripherals. Soon 
-after, Tony Hoare gave the problem its present formulation.[1][2][3]
+after, Tony Hoare gave the problem its present formulation.
 
 ## Problem statement
 
