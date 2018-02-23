@@ -1,7 +1,7 @@
 ---
 ---
 	
-![Socrates](https://upload.wikimedia.org/wikipedia/commons/a/a4/Socrates_Louvre.jpg)
+<img src="https://www.biography.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cg_face%2Cq_80%2Cw_300/MTE5NTU2MzE2MzcyODk1MjQz/socrates-9488126-1-402.jpg" style="float:left">
 
 # Syllogism
 
