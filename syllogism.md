@@ -1,6 +1,8 @@
 ---
 ---
 	
+![Socrates][https://upload.wikimedia.org/wikipedia/commons/a/a4/Socrates_Louvre.jpg]
+
 # Syllogism
 
 (Greek: συλλογισμός syllogismos, 
@@ -22,8 +24,11 @@ are usually represented in a three-line form:
 *   All men are mortal.
 *   Socrates is a man.
 *   Therefore Socrates is mortal.
-	
-	
+
+We can now put this in an image:
+
+![image][http://gracebiblegillette.org/logicandbible_files/image018.jpg]
+
 ```alloy
 
 	sig Men{}
@@ -43,7 +48,7 @@ are usually represented in a three-line form:
 
 ```
 
-	## Bad use of Syllogism
+## Bad use of Syllogism
 
 This is very error prone since the following is not correct:
 
