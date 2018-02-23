@@ -1,7 +1,7 @@
 ---
 ---
 	
-![Socrates][https://upload.wikimedia.org/wikipedia/commons/a/a4/Socrates_Louvre.jpg]
+![Socrates](https://upload.wikimedia.org/wikipedia/commons/a/a4/Socrates_Louvre.jpg)
 
 # Syllogism
 
@@ -27,7 +27,7 @@ are usually represented in a three-line form:
 
 We can now put this in an image:
 
-![image][http://gracebiblegillette.org/logicandbible_files/image018.jpg]
+![image](http://gracebiblegillette.org/logicandbible_files/image018.jpg)
 
 ```alloy
 
