@@ -21,8 +21,6 @@ that any comprehension seems to succeed because it misses atoms for one of the v
 
 	some sig Item, Token {}
 ```
-
-
 ## Actions
 
 We create a serial trace of actions on the store. We have the following actions.
@@ -48,7 +46,6 @@ We add the credentials for Alice but no credentials for Eve. That is, Eve has no
 store.
 
 ```alloy
-
 	let digest[password] = password
 	let authenticate[userid,password] = 
 		userid->digest[password] in 
@@ -306,7 +303,6 @@ This is a bit of a conumdrum but it shows the power of Alloy. This immediately s
 fragile passwords are. In the real world we demand from the users that they keep their 
 passwords secret. We therefore record this (stupid!) assumption in a fact.
 
-Uncomment the following fact and the run the previous command again.
 
 ```alloy
 
@@ -314,6 +310,8 @@ Uncomment the following fact and the run the previous command again.
 		//all disj b1, b2 : Browser | b1.userid = b2.userid => b1.password != b2.password
 	}
 ```
+Uncomment the previous fact and the run the EveBuying command again. This gives the following output
+
 	┌──────────┬───────┬──────┬──────┬─────────────┬─────┬──────────────┬──────┬─────────┐
 	│this/State│browser│action│bought│cookies      │stock│cart          │token │nextToken│
 	├──────────┼───────┼──────┼──────┼─────────────┼─────┼──────────────┼──────┼─────────┤
