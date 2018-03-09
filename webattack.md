@@ -270,7 +270,10 @@ in the password database.
 So we can check that Eve can never buy anything:
 
 ```alloy
-	check { no s : State | s.browser = Eve and s.action = BUY } for 4
+        assert Evil {
+		no s : State | s.browser = Eve and s.action = BUY 
+	}
+	check Evil for 4
 ```
 
 Interesting! This gives us the following output.
