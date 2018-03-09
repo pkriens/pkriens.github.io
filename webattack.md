@@ -21,6 +21,8 @@ that any comprehension seems to succeed because it misses atoms for one of the v
 
 	some sig Item, Token {}
 ```
+
+
 ## Actions
 
 We create a serial trace of actions on the store. We have the following actions.
@@ -69,7 +71,6 @@ to ignore or violete the contract of cookies. We can therefore not create any fa
 cookies.
 
 ```alloy
-	
 	sig State {
 
 		browser		: lone Browser,
@@ -86,7 +87,6 @@ cookies.
 		cart		: Token -> (Item+String),
 		token		: lone Token,
 		nextToken	: Token,
-
 	}
 ```
 ## Login
@@ -262,13 +262,17 @@ That is, each action predicate is used to constrain State-n -> State-n+1.
 	}
 ```
 
-## Running 
+## Checking 
 
-We're now ready to run this trace. If we run it randomly then we get  solutions with lots of
-stutter. So we'd like to see trace with a BUY action of our dear Eve. 
+We do not want Eve to be able to buy anything, only Alice's credentials are recorded
+in the password database.
+
+So we can check that Eve can never buy anything:
+
 ```alloy
-	run EveBuying { some s : State | s.action = BUY and s.browser = Eve }
+	check { no s : State | s.browser = Eve and s.action = BUY } for 4
 ```
+
 Interesting! This gives us the following output.
 
 It is clear that for State¹ Eve logins but she is maliciously using the credentials of 
@@ -328,7 +332,7 @@ Since Eve can no longer succeed in using Alice's credentials, it tries to steal 
 server handed to Alice's browser. It can do this by sniffing in on a wireless network at
 Starbucks when Alice uses normal HTTP, not encrypted HTTPS.
 
-It is interesting to see that the item adds up in Alice's cart. 
+It is interesting to see that the item ends up in Alice's cart. 
 
 So we need to record a fact that our model can assume that in the real world the cookies are
 protected using HTTPS and cannot be guessed. In our model that means we can 'trust' the
@@ -342,9 +346,11 @@ Again uncomment for making it active.
 	}
 ```
 
-Instead of doing a run, we now want to make sure Eve cannot buy anything ever ... 
+Instead of doing a run, we now want to make sure Eve cannot buy anything ever ... So if you
+run the check again it should fail to find a counter example.
 
-```alloy
-	check { no s : State | s.browser = Eve and s.action = BUY } for 4
-```
+So now we know the web is safe! #not
+
+
+
 
