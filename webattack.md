@@ -48,10 +48,11 @@ We add the credentials for Alice but no credentials for Eve. That is, Eve has no
 store.
 
 ```alloy
-	let digest[password] = password
-	let authenticate[userid,password] = 
+	fun digest[password : String ] : String { password }
+	pred authenticate[userid,password : String] {
 		userid->digest[password] in 
 			("Alice" -> digest["Bob123"]) 
+	}
 ```
 
 ## State
