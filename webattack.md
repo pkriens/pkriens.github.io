@@ -329,8 +329,6 @@ Again uncomment for making it active.
 	fact HTTPS {
 	//	all s : State | one s.token implies s.token = s.cookies[s.browser]
 	}
-run { some s : State | s.action = LOGIN}
-
 ```
 
 Instead of doing a run, we now want to make sure Eve cannot buy anything ever ... So if you
