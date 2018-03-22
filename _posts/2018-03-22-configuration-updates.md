@@ -100,13 +100,13 @@ configurations in Configuration Admin. Using property keys was clearly not a goo
 
 We use _method names_ as property keys when we use Configuration interfaces. To support
 updates, we would have to create _set_ methods on the
-configuration interfaces. These set method could then o modify the confguration. Much better than
+configuration interfaces. These set method could then modify the configuration. Much better than
 property keys, but it would require specifying the same property name as a getter and setter method.
 That is a pattern made popular by beans but that I rank it only minutely better than string property keys. 
 
 And then the small detail of course that annotations cannot have set methods ... Difficult.
 
-So one day, propably after having been inspired by Mockito, I realized that I could leverage the guaranteed 
+So one day, probably after having been inspired by Mockito, I realized that I could leverage the guaranteed 
 calling order of Java. 
 
 If I created a proxy on the interface I could record what method
@@ -129,7 +129,7 @@ This looks a tad complicated but in code it looks surprisingly natural:
    
 ## Config Helper
 
-I therefore created a _Config Helper_ class that can update Configuration Admin programmatically
+Some time ago there was a [question on Stackoverflow](https://stackoverflow.com/questions/49238517/how-to-map-service-factory-pids-to-their-objectclassdefinition/49239698?noredirect=1#comment85508462_49239698) by someone who was struggling with this. I therefore created a _Config Helper_ class that can update Configuration Admin programmatically
 using the configuration interfaces to ge the property names and types. 
 
     @Reference
