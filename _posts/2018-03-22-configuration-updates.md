@@ -5,9 +5,7 @@ layout: default
 
 ## Properties Suck
 
-Although I am often puzzled about some developer choices, there seems to be one 
-thing that almost every developer agree on: properties where you need to maintain
-the key as a constant string suck. Code like the following:
+Although I am often puzzled about some developer choices, almost every developer seems to agree that manipulating properties suck. That is, I've never met anybody that likes to write this kind of code:
 
 	public final static String MY_PROPERTY_KEY = "my.property.key"
 
@@ -20,16 +18,15 @@ the key as a constant string suck. Code like the following:
 
 		BARF!
 
-This style of programming is loud, ugly, and extremely error prone. When you have to work
-with an API like this you feel dirty. As said, this is one of the sometimes few things
-I agree with virtually every developer.
+This style of programming is loud, ugly, redundant, and extremely error prone. When you have to work
+with an API like this you feel dirty. As said before, this is one of few consensus things in Java.
 
 ## Progress
 
-When I took a year off in 2012 (!) to do JPM I added a facility to bnd so I would at least use
-my configuration from methods defined on interfaces:
+When I took a year off in 2012 (!) to do JPM I added a facility to bnd define my _configuration schema_ in 
+a normal Java interface:
 
-	// deprecated bnd model from pre 2012
+	// now deprecated bnd model from pre 2012
 	interface Config {
 		int port( int deflt);
 		String host( String deflt);
@@ -44,15 +41,13 @@ my configuration from methods defined on interfaces:
 		s = new Socket( config.host("localhost"), config.port(8976));
 	}
 
-In this model, we use the method name as the property and the return type as the value type. The magic converter (which also became an OSGi specification in R7) handles the low level details of converting from whatever type is in the map to the (generic) return type of the method that acts as the property key.
+We use the _method name_ as the property key and the return type as the _value type_. The 'magic' converter (which also became an OSGi specification in R7!) handles the low level details of converting from the value in the map to the (generic) return type. If the map holds a `Long[]`, the return type can be a `List<Byte>`. No sweat, all these conversions are handled completely transparent. Clearly, this is a huge improvement over constant string property keys. 
 
-Clearly, this is a huge improvement. The converter does not only create a proxy on the map,
-it also type converts the variables in the configuration to requested type in the interface.
 At the time, I also added annotations for Metatype support which could provide defaults and
 options. (Although the data type could be an `enum` which is mostly the same idea.)
 
-Then, after I returned to the OSGi Alliance I convinced the EG to adopt this style in
-DS. 
+Then, after I returned to the OSGi Alliance I worked to convince the EG to adopt this style in
+DS, this fortunately worked out. The annotation interface as configuration was introduced in R6.
 
 	// Current DS model
 	@interface Config {
@@ -68,48 +63,63 @@ DS.
 	}
 
 
-I did not get full interfaces but annotation interfaces do provide 95% of the 
-goodies. 
+I did not get my full interfaces but annotation interfaces do provide 95% of the 
+goodies. So that is good enough. (And they have a nice way to specify defaults.) 
 
 ## Metatype & Web Console
 
-At the same time in 2012 I added metatype support for these configuration interfaces
-in bnd. If you _designated_ an interface from a `@Component` annotation then bnd would
+When I developed the bnd DS annotations (2009??) I also added metatype support. 
+If you _designated_ an interface from a `@Component` annotation then bnd would
 create the appropriate metatype XML in your bundle. And then the magic happened ... When you
 went to Web Console you could _edit_ your configuration from a very nice user interface. 
 (Everything is relative, for the GUI challenged Java developer world it is _extremely nice_.)
 
-We also adopted this feature in the OSGi and then added support for R6 in bnd. We're now
-working on bnd 4.0.0 where the old style annotations that bnd pioneered will be gone. It
-is good see how thet ended up in the spec.
+We also adopted this feature in the OSGi R6 and then added support for this in bnd. We're now
+working on bnd 4.0.0 where the old style annotations that bnd pioneered will be gone. An era gone by ...
+Clearly, it is good see how much of that ended up in the OSGi specifications.
 
 ## All Is Under Control, Except ...
 
-Then there was this nagging question from the back of the room: 'How updating configurations?'.
-The only answer I had was: 'Well, ehhh, use Web Console? Or, hmmm, use properties?'. Having
-to revert to define propety keys as constant strings is of course a giant defeat. 
+Then there was this nagging question from the back of the room: 'How about updating configurations?'.
+The only answer I had was: 'Well, ehhh, use Web Console?'. Then they usually replied: 'We need to do
+this programmatically!'. To which my sad reply then was: 'Hmmm, use properties?'. 
 
-While working for SMA in Kassel I ran into this problem. There we've standardized _all_ configuration
-to go through Configuration Admin. This implies that the GUI code of the product often had to
-update the Configuration Admin service with new configurations. Clearly, this, eh, sucked.
+Having to revert to define property keys as constant strings is of course a giant defeat. 
+
+While working for [SMA in Kassel](http://www.ennexos.com/en/) I ran into this problem head on. I had (rather
+strongly) advised them to store _all_ configuration in Configuration Admin. Although Configuration Admin
+clearly is not the best solution in _all_ cases, having one solution usually far outweighs the
+micro improvements one can make with a dedicated tool. (This strategy has worked out extremely well.)
+
+However, if you store everything in Configuration Admin then it is inevitable that many different
+places need to update the Configuration Admin. The Web Console is extremely nice for developers but
+clearly falls short for end users. It therefore falls on the the bundles to store their changed
+configurations in Configuration Admin. Using property keys was clearly not a good idea.
 
 ## Back to Type Safety
 
-Clearly we use method names as property keys. However, we would have to create _set_ methods on the
-interfaces to be able to modify the confguration. Better, but it would require specifying the
-same property name as a getter and setter and that is a pattern made popular by beans but that I 
-rank only minutely better  than string property keys. And then the small detail of course that
-annotations cannot have set methods ... Difficult.
+We use _method names_ as property keys when we use Configuration interfaces. To support
+updates, we would have to create _set_ methods on the
+configuration interfaces. These set method could then o modify the confguration. Much better than
+property keys, but it would require specifying the same property name as a getter and setter method.
+That is a pattern made popular by beans but that I rank it only minutely better than string property keys. 
 
-So one day, probably after using Mockito, I realized that I could leverage the guaranteed 
-calling order of Java. If I created a proxy on the interface I could record what method
-was called. If I could then immediately afterwards provided a value, I could store that
-value on the last called method's name. This is very similar to how you build up a mock
+And then the small detail of course that annotations cannot have set methods ... Difficult.
+
+So one day, propably after having been inspired by Mockito, I realized that I could leverage the guaranteed 
+calling order of Java. 
+
+If I created a proxy on the interface I could record what method
+was called. Then immediately afterwards, I could call a set method with a
+value. The set method could use the last called method's name and store the 
+new value under this name.. 
+
+This is very similar to how you build up a mock
 with Mockito and some other libraries. 
 
-This is quite a complex sequence so let's (at least try to) elucidate it with a sequence diagram:
+This is quite a complex sequence so let's (ok, try to) elucidate it with a sequence diagram:
 
-![Proxy](http://www.plantuml.com/plantuml/png/NOxB3i8W44Nt_Of9t41Y-G1IcoQkTUV29Q5ZOyA3mE3ZxwLIQtG3kPpBd1aIgKZPckRiCxGzb4k2XXqulCFUkyjrEeLH4R8QX3Og9VwfQmaBuA15YFxnP2kiG4BmaSfhZSklCeMAPJEpBwdwY9IZWovvYt1J9cE_-a0MJq9YFtWBtRnl3RpHRNzGGK8vHCZ4tZOn8HsLHSR_sWEwCLlp0W00)
+![Proxy](http://www.plantuml.com/plantuml/png/NO_1YiCW54Nt-OeBtIWqVe2a8T1rPzT5bs9UGo5HqMVx-pKrpJ2pKUuxLuyEYKtalCpDpMUqFSgcON62enVEtjqVqpMCXadKeEniKfBVkjNOW8HLezX17Me47xbCQznEb1ku60uh-oLL7ObpTEYINmXFCsVgTnTqSIHYyGSVqQrlhK4sjkql9cYKHONCucDJ4_6FMKZ8V-s1t5X-_mO0)
 
 This looks a tad complicated but in code it looks surprisingly natural:
 
@@ -119,8 +129,8 @@ This looks a tad complicated but in code it looks surprisingly natural:
    
 ## Config Helper
 
-I therefore created a _Config Helper_ that can update Configuration Admin programmatically
-usin the configuration interfaces. 
+I therefore created a _Config Helper_ class that can update Configuration Admin programmatically
+using the configuration interfaces to ge the property names and types. 
 
     @Reference
     ConfigurationAdmin cm;
