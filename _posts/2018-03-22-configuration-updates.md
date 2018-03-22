@@ -2,7 +2,7 @@
 title : Configuration Updater
 layout: default
 ---
-
+# Configuration Updater
 ## Properties Suck
 
 Although I am often puzzled about some developer choices, almost every developer seems to agree that manipulating properties suck. That is, I've never met anybody that likes to write this kind of code:
