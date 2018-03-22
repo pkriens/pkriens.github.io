@@ -135,12 +135,12 @@ usin the configuration interfaces.
 
 Look ma! No property keys!
 
-You can find the code at [Github][1]. If there is an open source project that wants to adopt it, let me know. First come, first served!
+You can find the code at [Github][1]. If there is an open source project that wants to adopt it, let me know. If multiple people find this interesting I can also push it to Maven Central.
 
 Enjoy!
 
   Peter Kriens
-  [@pkriens][https://twitter.com/pkriens]
+  [@pkriens](https://twitter.com/pkriens)
   
 [1]: https://github.com/aQute-os/biz.aQute.osgi.util/tree/master/biz.aQute.osgi.configuration.util
 		
