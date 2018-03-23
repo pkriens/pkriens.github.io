@@ -1,9 +1,10 @@
 ---
 title : Configuration Updater
 layout: default
-description: What to do when you defined your configuration schema in a Java annotation interface but now need to update the configuration?
 comments: true
+description: What to do when you defined your configuration schema in a Java annotation interface but now need to update the configuration?
 ---
+
 # Configuration Updater
 ## Properties Suck
 
