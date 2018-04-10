@@ -7,7 +7,7 @@ comment: You can run this whole markdown text in Alloy 5 Beta
 We design this game around a _Board_. The Board is the state and we will use _game rules_ encoded in predicates to
 constrain the transitions to the next board.
 
-1[tictactoe](http://mathworld.wolfram.com/images/eps-gif/Tic-Tac-Toe_600.gif)
+![tictactoe](http://mathworld.wolfram.com/images/eps-gif/Tic-Tac-Toe_600.gif)
 
 ## Setup
 
