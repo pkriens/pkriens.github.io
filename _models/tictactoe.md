@@ -1,5 +1,7 @@
 ---
-comment: You can run this whole markdown text in Alloy 5 Beta
+layout: post
+title: Tic Tac Toe in Alloy
+description: The game of tic-tac-toe in Alloy
 ---
 
 # TIC-TAC-TOE
@@ -7,7 +9,7 @@ comment: You can run this whole markdown text in Alloy 5 Beta
 We design this game around a _Board_. The Board is the state and we will use _game rules_ encoded in predicates to
 constrain the transitions to the next board.
 
-![tictactoe](http://mathworld.wolfram.com/images/eps-gif/Tic-Tac-Toe_600.gif)
+![TicTacToe](http://mathworld.wolfram.com/images/eps-gif/Tic-Tac-Toe_600.gif)
 
 ## Setup
 
@@ -87,7 +89,7 @@ token.
 
 	pred play[b, b' : Board ] {
 		b'.won=_
-		some token : X+O {
+		one token : X+O {
 			b.move != token
 			b'.move = token
 			some row,col : N {
