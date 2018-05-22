@@ -131,7 +131,7 @@ as a table:
 
 ## Magic
 
-The hardest part to get now is that Alloy is a bit like a quantum computer, it starts the superposition of _all_
+The hardest part to get now is that Alloy is a bit like a quantum computer, it looks like it has the superposition of _all_
 possible values. We can ask Alloy for example how one of the possible trace table looks like without any constraints
 defined on it:
 
