@@ -27,7 +27,7 @@ the clock is the _event_, let's call it CLOCK. To make the problem a tad more in
 add a RESET event that always forces the state to OFF. 
 
 ```alloy
-open util/ordering[Trace]
+open util/ordering[Transition]
 
 enum Event { CLOCK, RESET }
 enum State { ON, OFF }
@@ -70,38 +70,14 @@ Or as a table:
 Now we get to the interesting part! Clearly, a flip flop changes over _time_. How do we explore this time aspect? 
 In Alloy, we can explore time aspects by creating a _trace_. A trace is basically a table (relation) where each
 row represents a moment in time. In generally, each row represents a _step_ and rows before other rows were earlier in 
-time. Each step is generally an atomic step in a (concurrent) algorithm. That is, a trace looks like:
-
-	┌──────────┬─────┬──────┐
-	│this/Trace│state│event │
-	├──────────┼─────┼──────┤
-	│Trace⁰    │OFF⁰ │CLOCK⁰│
-	├──────────┼─────┼──────┤
-	│Trace¹    │ON⁰  │CLOCK⁰│
-	├──────────┼─────┼──────┤
-	│Trace²    │OFF⁰ │RESET⁰│
-	├──────────┼─────┼──────┤
-	│Trace³    │OFF⁰ │CLOCK⁰│
-	├──────────┼─────┼──────┤
-	│Trace⁴    │ON⁰  │CLOCK⁰│
-	├──────────┼─────┼──────┤
-	│Trace⁵    │OFF⁰ │CLOCK⁰│
-	├──────────┼─────┼──────┤
-	│Trace⁶    │ON⁰  │CLOCK⁰│
-	├──────────┼─────┼──────┤
-	│Trace⁷    │OFF⁰ │CLOCK⁰│
-	├──────────┼─────┼──────┤
-	│Trace⁸    │ON⁰  │CLOCK⁰│
-	├──────────┼─────┼──────┤
-	│Trace⁹    │OFF⁰ │CLOCK⁰│
-	└──────────┴─────┴──────┘
+time. Each step is generally an atomic step in a (concurrent) algorithm. 
 
 So let's define the data for the trace.
 
 ```alloy
-sig Trace {
-	state	: State,
-	event	: Event
+sig Transition {
+	before	: State,
+	occurs	: Event
 }
 ```
 
@@ -109,25 +85,25 @@ Notice that at the start we made Trace `sig` objects _ordered_. That is, there i
 as well as that all Trace atoms have a `next` and `prev`. As an aside, this ordering is internally maintained
 as a table:
 
-	┌──────┬──────┐
-	│Trace⁰│Trace¹│
-	├──────┼──────┤
-	│Trace¹│Trace²│
-	├──────┼──────┤
-	│Trace²│Trace³│
-	├──────┼──────┤
-	│Trace³│Trace⁴│
-	├──────┼──────┤
-	│Trace⁴│Trace⁵│
-	├──────┼──────┤
-	│Trace⁵│Trace⁶│
-	├──────┼──────┤
-	│Trace⁶│Trace⁷│
-	├──────┼──────┤
-	│Trace⁷│Trace⁸│
-	├──────┼──────┤
-	│Trace⁸│Trace⁹│
-	└──────┴──────┘
+	┌───────────┬───────────┐
+	│Transition⁰│Transition¹│
+	├───────────┼───────────┤
+	│Transition¹│Transition²│
+	├───────────┼───────────┤
+	│Transition²│Transition³│
+	├───────────┼───────────┤
+	│Transition³│Transition⁴│
+	├───────────┼───────────┤
+	│Transition⁴│Transition⁵│
+	├───────────┼───────────┤
+	│Transition⁵│Transition⁶│
+	├───────────┼───────────┤
+	│Transition⁶│Transition⁷│
+	├───────────┼───────────┤
+	│Transition⁷│Transition⁸│
+	├───────────┼───────────┤
+	│Transition⁸│Transition⁹│
+	└───────────┴───────────┘
 
 ## Magic
 
@@ -136,31 +112,31 @@ possible values. We can ask Alloy for example how one of the possible trace tabl
 defined on it:
 
 ```alloy
- run {} for 10
+ run random {} for 10
 ```
-	┌──────────┬─────┬──────┐
-	│this/Trace│state│event │
-	├──────────┼─────┼──────┤
-	│Trace⁰    │OFF⁰ │RESET⁰│
-	├──────────┼─────┼──────┤
-	│Trace¹    │OFF⁰ │CLOCK⁰│
-	├──────────┼─────┼──────┤
-	│Trace²    │OFF⁰ │CLOCK⁰│
-	├──────────┼─────┼──────┤
-	│Trace³    │OFF⁰ │CLOCK⁰│
-	├──────────┼─────┼──────┤
-	│Trace⁴    │OFF⁰ │CLOCK⁰│
-	├──────────┼─────┼──────┤
-	│Trace⁵    │OFF⁰ │CLOCK⁰│
-	├──────────┼─────┼──────┤
-	│Trace⁶    │OFF⁰ │CLOCK⁰│
-	├──────────┼─────┼──────┤
-	│Trace⁷    │OFF⁰ │CLOCK⁰│
-	├──────────┼─────┼──────┤
-	│Trace⁸    │OFF⁰ │CLOCK⁰│
-	├──────────┼─────┼──────┤
-	│Trace⁹    │OFF⁰ │CLOCK⁰│
-	└──────────┴─────┴──────┘
+	┌───────────────┬──────┬──────┐
+	│this/Transition│before│occurs│
+	├───────────────┼──────┼──────┤
+	│Transition⁰    │ON⁰   │RESET⁰│
+	├───────────────┼──────┼──────┤
+	│Transition¹    │OFF⁰  │RESET⁰│
+	├───────────────┼──────┼──────┤
+	│Transition²    │OFF⁰  │RESET⁰│
+	├───────────────┼──────┼──────┤
+	│Transition³    │OFF⁰  │RESET⁰│
+	├───────────────┼──────┼──────┤
+	│Transition⁴    │OFF⁰  │RESET⁰│
+	├───────────────┼──────┼──────┤
+	│Transition⁵    │OFF⁰  │CLOCK⁰│
+	├───────────────┼──────┼──────┤
+	│Transition⁶    │OFF⁰  │RESET⁰│
+	├───────────────┼──────┼──────┤
+	│Transition⁷    │ON⁰   │RESET⁰│
+	├───────────────┼──────┼──────┤
+	│Transition⁸    │OFF⁰  │RESET⁰│
+	├───────────────┼──────┼──────┤
+	│Transition⁹    │OFF⁰  │RESET⁰│
+	└───────────────┴──────┴──────┘
 
 This just one of the 4096 possible trace tables. (#state * #event)^10. This clearly is a tiny example, the state table that 
 inspired this blog had 14 states, 7 events, and I tried 40 steps. The number of state tables is about as high as the 
@@ -184,8 +160,8 @@ the next row to be constrained by the `transitions` table.
 
 ```alloy
 pred trace {
-	all t : Trace-last, t' : t.next {
-		t'.state = transitions[t.state][t.event]
+	all t : Transition-last, t' : t.next {
+		t'.before = transitions[t.before][t.occurs]
 	}
 }
 ```
@@ -194,65 +170,64 @@ We can now ask Alloy for an instance:
 ```alloy
  run trace for 10
 ```
-	┌──────────┬─────┬──────┐
-	│this/Trace│state│event │
-	├──────────┼─────┼──────┤
-	│Trace⁰    │OFF⁰ │CLOCK⁰│
-	├──────────┼─────┼──────┤
-	│Trace¹    │ON⁰  │CLOCK⁰│
-	├──────────┼─────┼──────┤
-	│Trace²    │OFF⁰ │RESET⁰│
-	├──────────┼─────┼──────┤
-	│Trace³    │OFF⁰ │CLOCK⁰│
-	├──────────┼─────┼──────┤
-	│Trace⁴    │ON⁰  │CLOCK⁰│
-	├──────────┼─────┼──────┤
-	│Trace⁵    │OFF⁰ │CLOCK⁰│
-	├──────────┼─────┼──────┤
-	│Trace⁶    │ON⁰  │CLOCK⁰│
-	├──────────┼─────┼──────┤
-	│Trace⁷    │OFF⁰ │CLOCK⁰│
-	├──────────┼─────┼──────┤
-	│Trace⁸    │ON⁰  │CLOCK⁰│
-	├──────────┼─────┼──────┤
-	│Trace⁹    │OFF⁰ │CLOCK⁰│
-	└──────────┴─────┴──────┘
+	┌───────────────┬──────┬──────┐
+	│this/Transition│before│occurs│
+	├───────────────┼──────┼──────┤
+	│Transition⁰    │OFF⁰  │CLOCK⁰│
+	├───────────────┼──────┼──────┤
+	│Transition¹    │ON⁰   │CLOCK⁰│
+	├───────────────┼──────┼──────┤
+	│Transition²    │OFF⁰  │RESET⁰│
+	├───────────────┼──────┼──────┤
+	│Transition³    │OFF⁰  │CLOCK⁰│
+	├───────────────┼──────┼──────┤
+	│Transition⁴    │ON⁰   │CLOCK⁰│
+	├───────────────┼──────┼──────┤
+	│Transition⁵    │OFF⁰  │CLOCK⁰│
+	├───────────────┼──────┼──────┤
+	│Transition⁶    │ON⁰   │CLOCK⁰│
+	├───────────────┼──────┼──────┤
+	│Transition⁷    │OFF⁰  │CLOCK⁰│
+	├───────────────┼──────┼──────┤
+	│Transition⁸    │ON⁰   │CLOCK⁰│
+	├───────────────┼──────┼──────┤
+	│Transition⁹    │OFF⁰  │CLOCK⁰│
+	└───────────────┴──────┴──────┘
 
 In this case the first state is `OFF`. Are there also solutions where the first state is `ON`? We can ask
 Alloy for such a solution the following way:
 
 ```alloy
-run {
+run firstOn {
 	trace
-	first.state = ON
+	first.before = ON
 } for 10
 ```
 And this works fine:
 	
-	┌──────────┬─────┬──────┐
-	│this/Trace│state│event │
-	├──────────┼─────┼──────┤
-	│Trace⁰    │ON⁰  │RESET⁰│
-	├──────────┼─────┼──────┤
-	│Trace¹    │OFF⁰ │CLOCK⁰│
-	├──────────┼─────┼──────┤
-	│Trace²    │ON⁰  │CLOCK⁰│
-	├──────────┼─────┼──────┤
-	│Trace³    │OFF⁰ │CLOCK⁰│
-	├──────────┼─────┼──────┤
-	│Trace⁴    │ON⁰  │CLOCK⁰│
-	├──────────┼─────┼──────┤
-	│Trace⁵    │OFF⁰ │CLOCK⁰│
-	├──────────┼─────┼──────┤
-	│Trace⁶    │ON⁰  │CLOCK⁰│
-	├──────────┼─────┼──────┤
-	│Trace⁷    │OFF⁰ │CLOCK⁰│
-	├──────────┼─────┼──────┤
-	│Trace⁸    │ON⁰  │CLOCK⁰│
-	├──────────┼─────┼──────┤
-	│Trace⁹    │OFF⁰ │CLOCK⁰│
-	└──────────┴─────┴──────┘
-
+	┌───────────────┬──────┬──────┐
+	│this/Transition│before│occurs│
+	├───────────────┼──────┼──────┤
+	│Transition⁰    │ON⁰   │CLOCK⁰│
+	├───────────────┼──────┼──────┤
+	│Transition¹    │OFF⁰  │CLOCK⁰│
+	├───────────────┼──────┼──────┤
+	│Transition²    │ON⁰   │CLOCK⁰│
+	├───────────────┼──────┼──────┤
+	│Transition³    │OFF⁰  │CLOCK⁰│
+	├───────────────┼──────┼──────┤
+	│Transition⁴    │ON⁰   │CLOCK⁰│
+	├───────────────┼──────┼──────┤
+	│Transition⁵    │OFF⁰  │CLOCK⁰│
+	├───────────────┼──────┼──────┤
+	│Transition⁶    │ON⁰   │CLOCK⁰│
+	├───────────────┼──────┼──────┤
+	│Transition⁷    │OFF⁰  │CLOCK⁰│
+	├───────────────┼──────┼──────┤
+	│Transition⁸    │ON⁰   │CLOCK⁰│
+	├───────────────┼──────┼──────┤
+	│Transition⁹    │OFF⁰  │CLOCK⁰│
+	└───────────────┴──────┴──────┘
 
 ## Querying
 
@@ -263,44 +238,44 @@ always be OFF?
 ```alloy
 run AlwaysOff {
 	trace
-	first.state = OFF
-	all t : Trace | t.state = OFF
+	first.before = OFF
+	all t : Transition | t.before = OFF
 } for 10 expect 1
 ```
 
 An instance of this is:
 
-	┌──────────┬─────┬──────┐
-	│this/Trace│state│event │
-	├──────────┼─────┼──────┤
-	│Trace⁰    │OFF⁰ │RESET⁰│
-	├──────────┼─────┼──────┤
-	│Trace¹    │OFF⁰ │RESET⁰│
-	├──────────┼─────┼──────┤
-	│Trace²    │OFF⁰ │RESET⁰│
-	├──────────┼─────┼──────┤
-	│Trace³    │OFF⁰ │RESET⁰│
-	├──────────┼─────┼──────┤
-	│Trace⁴    │OFF⁰ │RESET⁰│
-	├──────────┼─────┼──────┤
-	│Trace⁵    │OFF⁰ │RESET⁰│
-	├──────────┼─────┼──────┤
-	│Trace⁶    │OFF⁰ │RESET⁰│
-	├──────────┼─────┼──────┤
-	│Trace⁷    │OFF⁰ │RESET⁰│
-	├──────────┼─────┼──────┤
-	│Trace⁸    │OFF⁰ │RESET⁰│
-	├──────────┼─────┼──────┤
-	│Trace⁹    │OFF⁰ │CLOCK⁰│
-	└──────────┴─────┴──────┘
+	┌───────────────┬──────┬──────┐
+	│this/Transition│before│occurs│
+	├───────────────┼──────┼──────┤
+	│Transition⁰    │OFF⁰  │RESET⁰│
+	├───────────────┼──────┼──────┤
+	│Transition¹    │OFF⁰  │RESET⁰│
+	├───────────────┼──────┼──────┤
+	│Transition²    │OFF⁰  │RESET⁰│
+	├───────────────┼──────┼──────┤
+	│Transition³    │OFF⁰  │RESET⁰│
+	├───────────────┼──────┼──────┤
+	│Transition⁴    │OFF⁰  │RESET⁰│
+	├───────────────┼──────┼──────┤
+	│Transition⁵    │OFF⁰  │RESET⁰│
+	├───────────────┼──────┼──────┤
+	│Transition⁶    │OFF⁰  │RESET⁰│
+	├───────────────┼──────┼──────┤
+	│Transition⁷    │OFF⁰  │RESET⁰│
+	├───────────────┼──────┼──────┤
+	│Transition⁸    │OFF⁰  │RESET⁰│
+	├───────────────┼──────┼──────┤
+	│Transition⁹    │OFF⁰  │CLOCK⁰│
+	└───────────────┴──────┴──────┘
 
 Could we also get the reverse, a trace with only ON?
 
 ```alloy
 run AlwaysOn {
 	trace
-	first.state = ON
-	all t : Trace | t.state = ON
+	first.before = ON
+	all t : Transition | t.before = ON
 } for 10 expect 0
 ```
 
