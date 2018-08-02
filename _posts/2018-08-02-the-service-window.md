@@ -23,8 +23,8 @@ Pragmatic works best as follows:
     public class MyClass extends Thread {   
       @Reference MyService myService;
    
-      @Activate void activate() 	{ start(); }
-      @Deactivate void deactivate() 	{ interrupt(); }
+      @Activate void activate()        { start(); }
+      @Deactivate void deactivate()    { interrupt(); }
    
       public void run() {
          while (!isInterrupted()) {
@@ -57,8 +57,8 @@ So there must be an explicit contract that the MyService is not going to stay aw
     public class MyClass extends Thread {   
       @Reference MyService myService;
    
-      @Activate void activate() 			{ start(); }
-      @Deactivate synchronized void deactivate() 	{ interrupt(); }
+      @Activate void activate()             { start(); }
+      @Deactivate synchronized void deactivate()    { interrupt(); }
    
       public void run() {
          while (!isInterrupted()) {
@@ -86,7 +86,7 @@ The best solution is usually to turn the problem around. This clearly can only h
       @Reference MyService myService;
       @Reference PromiseFactory promiseFactory;
 
-      @Activate void activate() 			{ 
+      @Activate void activate()             { 
         Promise<MyResult> result = promiseFactory.submit( this::doHardWork );
         myService.setResult( result );
       }
@@ -98,54 +98,54 @@ This is an example where you see a very weird effect that I first noticed in the
 
 If you have multiple results to deliver you might want to take a look at the [OSGi PushStream][1]. When I made the initial design for ASyncStreams (feels eons ago :-( ) that inspired the OSGi Push Stream specification  this was one of the use cases I had in mind. The Push Stream are intended to handle all the nasty cases and shield you from them. As a bonus, it actually works for multiple receivers as well. Push Streams provide a simple low cost backlink to handle the case where the MyService gets closed. Haven't looked at where Push Stream's ended up but as far as I know they should still be useful when your hard work delivers multiple results. Ah well, I wanted to take a look at it anyway since it has been released now. Let's see how that would look like:
 
-	@Component
-	public class ProviderImpl extends Thread {
-	
-		@Reference PushStreamProvider           psp;
-		@Reference MyService                    myService;
+    @Component
+    public class ProviderImpl extends Thread {
+    
+        @Reference PushStreamProvider           psp;
+        @Reference MyService                    myService;
 
-		volatile SimplePushEventSource<MyResult>	dispatcher;
-	
-		@Activate void activate() throws Exception {
-			dispatcher = psp.createSimpleEventSource(MyResult.class);
-			myService.setResult(dispatcher);
-			start();
-		}
-	
-		@Deactivate void deactivate() {
-			interrupt();
-		}
-	
-		@Override
-		public void run() {
-			try {
-				MyResult r = doHardWork();
-				while (!isInterrupted()) {
-					dispatcher.publish(r);
-					r = doHardWork();
-				}
-			} finally {
-				dispatcher.close();
-			}
-		}
-	}
+        volatile SimplePushEventSource<MyResult>    dispatcher;
+    
+        @Activate void activate() throws Exception {
+            dispatcher = psp.createSimpleEventSource(MyResult.class);
+            myService.setResult(dispatcher);
+            start();
+        }
+    
+        @Deactivate void deactivate() {
+            interrupt();
+        }
+    
+        @Override
+        public void run() {
+            try {
+                MyResult r = doHardWork();
+                while (!isInterrupted()) {
+                    dispatcher.publish(r);
+                    r = doHardWork();
+                }
+            } finally {
+                dispatcher.close();
+            }
+        }
+    }
 
 ## Use of Executors
 
 As a side note. I've been in systems where everybody was mucking around with ExecutorServices and it became a mess. In [v2Archive OSGi enRoute][3] I always provided an [Executor service][4] that is shared and does proper cleanup when the service getter goes away. (The [v2Archive OSGi enRoute Scheduler][6] was also very nice for this since it provides Cancelable Promises.) Executor Services created statically are horror in OSGi since they are completely oblivious of the OSGi dynamics. And in your case they are totally unnecessary. The only utility they provide to you is that they interrupt the threads. This is trivial to do when you create your own thread. (And messages about the expensiveness of threads are highly exaggerated.) Even if you use an Executor you can pass the thread.
 
-	Deferred<Thread> deferred = new Deferred<>();	
-	Promise<MyResult> promiseFactory.submit( () -> {
-		deferred.resolve( Thread.currentThread() );
+    Deferred<Thread> deferred = new Deferred<>();   
+    Promise<MyResult> promiseFactory.submit( () -> {
+        deferred.resolve( Thread.currentThread() );
 
-		while ( result == null && !Thread.currentThread().isInterrupted() {
+        while ( result == null && !Thread.currentThread().isInterrupted() {
                 … do some hard work
                 }
                 return result;
-	});
+    });
 
-	// deactivate
-	deferred.getPromise().getValue().interrupt();
+    // deactivate
+    deferred.getPromise().getValue().interrupt();
 
 In general, if you go this route, suggest you clearly separate the strategies from the code. I.e. make a separate class to capture the strategy of handling these things. Worst designs are where these are mixed.
 
