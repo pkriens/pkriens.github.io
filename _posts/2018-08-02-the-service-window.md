@@ -19,8 +19,8 @@ Pragmatic means there is a tiny chance you hit the window where you check if the
 
 Pragmatic works best as follows:
 
-   @Component
-   public class MyClass extends Thread {   
+    @Component
+    public class MyClass extends Thread {   
       @Reference MyService myService;
    
       @Activate void activate() 	{ start(); }
@@ -35,7 +35,7 @@ Pragmatic works best as follows:
             } catch (Exception e) { /* TODO */ }
          }
       }
-   }
+    }
 
 Clearly there is a race condition. 
 
@@ -53,8 +53,8 @@ So how would you make this 'purer' by delaying the deactivation until you stoppe
 
 So there must be an explicit contract that the MyService is not going to stay away for a long time nor call lots of other unknown code that could cause deadlocks. After all, we're blocking the deactivate() method which is very bad practice in general. So you will trade off one purity for another.
 
-   @Component
-   public class MyClass extends Thread {   
+    @Component
+    public class MyClass extends Thread {   
       @Reference MyService myService;
    
       @Activate void activate() 			{ start(); }
@@ -72,7 +72,7 @@ So there must be an explicit contract that the MyService is not going to stay aw
             } catch (Exception e) { /* TODO */ }
          }
       }
-   }
+    }
 
 This guarantees what you want … However (you knew this was coming!) there is a reason the service gets deactivated. Even though the _service_ is still valid at that point, there is a reason the _service object_ indicated its unwillingness to play. For example, if MyService was remoted then the connection might have been lost. In general, when you call a service you should be prepared that it fails. (That is why you should always take exceptions into account even if they're not checked.)
 
@@ -80,8 +80,8 @@ This guarantees what you want … However (you knew this was coming!) there is a
 
 The best solution is usually to turn the problem around. This clearly can only happen when you can influence the API so that is often not a choice. If you can, you can pass a Promise to the myService and calculate in the background. Clearly that means you keep churning doing the hard work. Unless the calculation is very expensive and the unregistration happens often, doing the calculation unnecessary should normally have no practical concerns. If it is, you might want to consider CompletableFuture instead of Promise since it has a cancel() method. (We rejected a cancel since it makes the Promise mutable, but admittedly it is useful. However, it has the same race issues as we discuss here.)
 
-   @Component
-   public class MyClass {
+    @Component
+    public class MyClass {
    
       @Reference MyService myService;
       @Reference PromiseFactory promiseFactory;
@@ -90,7 +90,7 @@ The best solution is usually to turn the problem around. This clearly can only h
         Promise<MyResult> result = promiseFactory.submit( this::doHardWork );
         myService.setResult( result );
       }
-   }
+    }
 
 This is an example where you see a very weird effect that I first noticed in the eighties during my first big OO design. At first you think the problem is now moved from MyClass to MyService? I think when you try to implement this that you find that the problem mostly _disappeared_. During one of the first large systems I designed I kept feeling we were kicking the hard problems down the road and we still run into a brick wall. However, one day we realized we were done. For some reason the hard problems were solved in the structure of the application and not in specific code. Weird. However, realizing this I often have to cry a bit when I realize how some designs are doing the opposite and make simple things complex :-(
 
