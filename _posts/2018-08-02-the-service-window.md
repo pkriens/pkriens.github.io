@@ -1,4 +1,3 @@
-
 ---
 title: Keep Passing the Open Windows
 layout: post
