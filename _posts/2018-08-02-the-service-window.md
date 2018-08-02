@@ -5,7 +5,7 @@ description:  "Mark Reinhold published the State of the Module System a few week
 comments: true
 ---
 
-In a recent thread on the [osgi-dev] list there was a question about the _service window_. In a dynamic environment like OSGi where services can be registered and unregistered anytime there are a number of race conditions. The key question was what to do when you do a calculation that takes a long time in a background thread but the service diseapred while you were at it. This is an extreme case where you want to call a service that in the mean has disappeared.
+In a recent thread on the [osgi-dev][8] list there was a question about the _service window_. In a dynamic environment like OSGi where services can be registered and unregistered anytime there are a number of race conditions. The key question was what to do when you do a calculation that takes a long time in a background thread but the service diseapred while you were at it. This is an extreme case where you want to call a service that in the mean has disappeared.
 
 This article analyzes that problem in detail and shows a number of solution. This probably should be part of the classic [v2Archive OSGi enRoute App note][5] but it has been archived by the OSGi to [v2Archive OSGi enRoute web site][3]. This App note handles a lot of similar cases. There is an accompanying workspace [v2Archive OSGi enRoute osgi.enroute.examples.concurrency][7] workspace.
 
@@ -163,3 +163,4 @@ Enjoy ...
 [5]: https://v2archive.enroute.osgi.org/appnotes/concurrency.html 
 [6]: https://github.com/osgi/v2archive.osgi.enroute/tree/master/osgi.enroute.scheduler.simple.provider
 [7]: https://github.com/osgi/osgi.enroute.examples.concurrency
+[8]: https://www.osgi.org/community/mail-lists/
