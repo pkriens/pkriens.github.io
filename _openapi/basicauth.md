@@ -1,4 +1,4 @@
-# Example Authentication
+ # Example Authentication
  
 
 This example demonstrates the use of the [HTTP Basic Authentication][1] in the OpenAPI suite. It creates a REST endpoint at `/openapi/security/basic` with two operations:
@@ -130,7 +130,7 @@ This example uses basic authentication based on the OSGi User Admin service. Thi
  
 There is a convenience command in the Basic Authentication Security provider for User Admin to list, set, reset passwords.
  
-    G! basicauth -u u123456 john.doe@example.com secret
+    G! passwd -u u123456 john.doe@example.com secret
     john.doe@example.com
     G!
  
