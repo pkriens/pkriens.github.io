@@ -34,15 +34,6 @@ software was in the late eighties. Micro-services share many of the underlying c
 a software primitive that is extremely well supported by the environment is tremendous. Sadly, service share the
 same problem objects had when they were new, the were hard to understand until you understood them.
 
-## OSGi enRoute
-
-If you're new (or even if the technology is familiar) we highly recommend to use the OSGi enRoute site
-to educate yourself. For new comers this provides the site with the current best practices. For people that
-use or have used the technology looking at OSGi enRoute might provide numerous surprises of how simple
-OSGi is today with the proper toolchain and setup. OSGi enRoute then provides a seamless transition to
-the numerous frameworks and distributions like Karaf, Liferay, Adone Experience Manager, Paremus, Websphere, and others 
-or use the learned knowledge to create a proprietary deployment, which is surprisingly easy to do.
-
 ## aQute
 
 The history of the OSGi and aQute have been closely intertwined since the inception of the OSGi Alliance.

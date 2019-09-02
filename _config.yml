@@ -10,27 +10,29 @@ title: aQute
 email: info@aQute.biz
 description: > # this means to ignore newlines until "baseurl:"
   aQute is specialized in providing pragmatic expertise, services, 
-  and products related to OSGi. 
+  and products related to OSGi.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://aQute.biz" # the base hostname & protocol for your site
 twitter_username: pkriens
-github_username:  pkriens
+github_username: pkriens
 
 # Build settings
 markdown: kramdown
 exclude:
-  - 'Gemfile'
-  - 'Gemfile.lock'
-  - 'README.md'
-  - 'CONTRIBUTING.md'
-  - 'LICENSE'
-  - 'run.sh'
-  - '.travis.yml'
-  - '/vendor'
+  - "Gemfile"
+  - "Gemfile.lock"
+  - "README.md"
+  - "CONTRIBUTING.md"
+  - "LICENSE"
+  - "run.sh"
+  - ".travis.yml"
+  - "/vendor"
 collections:
   posts:
     output: true
   models:
     output: true
   openapi:
+    output: true
+  appnotes:
     output: true
