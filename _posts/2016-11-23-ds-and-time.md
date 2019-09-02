@@ -9,7 +9,7 @@ comments: true
 
 I've just finished a rather extensive application note about concurrency and other
 time related issues for a customer. I've shared this application note with
-permission on the OSGi enRoute website. You can find it [here](http://enroute.osgi.org/appnotes/concurrency.html).
+permission on the OSGi enRoute website. You can find it [here](http://aqute.biz/appnotes/concurrency.html).
 
 The App note is providing some common background about time related issues. It
 discusses the Java memory model but then provides a large number of example of
