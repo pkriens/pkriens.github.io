@@ -5,6 +5,8 @@ description: A story to bring the joy of OSGi to an Android device
 comments: true
 ---
 
+# OSGi on Android
+
 I recently had to do some research in running an OSGi Framework as an Android application. The reason was that hardware vendors are trending to Android instead of plain Linux. The good GUI abstraction also helps of course.
 
 When Google designed Android they made the decision to not license a Java VM from Sun/Oracle for financial reasons. Instead, they took the Java language syntax and developed a new VM architecture: Dalvik. Any developer older than 25 can probably remember the [lawsuits](https://en.wikipedia.org/wiki/Google_v._Oracle_America) from a very unhappy Oracle.
