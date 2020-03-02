@@ -129,4 +129,4 @@ Using OSGi Connect on Android will allow developers to use the unsurpassed Bndto
 
 Anyway, let me know if you see a use for this work or think that I wasted my time.
 
-    [Peter Kriens](https://twitter.com/pkriens)
+[Peter Kriens](https://twitter.com/pkriens)
