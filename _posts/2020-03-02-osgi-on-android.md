@@ -119,7 +119,7 @@ However, Dalvik is clearly not Java 1.8. Fortunately, the Framework nicely told 
 
 ## Atomos
 
-Karl Pauls and Thomas Watson (IBM) already had started a project called [atomos](https://github.com/tjwatson/atomos) that focused on this runtime aspect. I had tried to use it initially but there were some Java 9 classes in the way so I just created my own Module Connector. However, this is interesting work they are doing and I intend to work with them to get Android support in this project.
+Karl Pauls and Thomas Watson (IBM) already had started a project called [atomos](https://github.com/apache/felix-atomos) that focused on this runtime aspect. I had tried to use it initially but there were some Java 9 classes in the way so I just created my own Module Connector. However, this is interesting work they are doing and I intend to work with them to get Android support in this project.
 
 ## Conclusion
 
