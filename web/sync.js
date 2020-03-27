@@ -8,12 +8,12 @@ class Sync {
       this.oc = null;
       this.options = {
         debug:  0,
-        host: "15.236.70.217",
-        port: 9001,
-        path: "/myapp",
-        key: "peerjs",
-        secure: false
-         ,
+//        host: "15.236.70.217",
+//        port: 9001,
+//        path: "/myapp",
+//        key: "peerjs",
+//        secure: false
+//         ,
          config: {'iceServers': [
               { url: 'turn:15.236.70.217:3478', username: "aQute", credential: "turn6754"},
               { url: 'stun:15.236.70.217:3478' , username: "aQute", credential: "turn6754"}
