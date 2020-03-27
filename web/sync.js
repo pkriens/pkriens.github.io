@@ -11,7 +11,8 @@ class Sync {
         host: "15.236.70.217",
         port: 9001,
         path: "/myapp",
-        key: "peerjs"
+        key: "peerjs",
+        secure: false
          ,
          config: {'iceServers': [
               { url: 'turn:15.236.70.217:3478', username: "aQute", credential: "turn6754"},
