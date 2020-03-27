@@ -1,0 +1,258 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Scrabble</title>
+    <meta name = "viewport" content = "user-scalable=no, width=device-width">
+
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/peerjs@1.2.0/dist/peerjs.min.js"></script>
+    <script src="https://unpkg.com/vue"></script>
+    <script src="sync.js"></script>
+    <script src="sprite.js"></script>
+
+
+    <style>
+    body {
+        font-family: Verdana;
+        font-size: 0.9em;
+    }
+
+    .tile {
+        width:  40px;
+        height: 40px;
+        position: absolute;
+        background-color: white;
+    }
+    .board {
+        position: absolute;
+        background-color: red;
+        width:  918px;
+        height: 918px;
+    }
+
+    svg {
+        margin-left: auto;
+        margin-right: auto;
+        width: 1000px;
+        height: 1200px;
+    }
+    .hide {
+        visibility: hidden;
+    }
+    video {
+        width: 100px;
+        border-radius:4px;
+        border: 1px solid grey;
+    }
+
+    div.users {
+        border-radius: 8px;
+        display: flex;
+        background-color: lightgrey;
+        width:100%;
+        font-size: 9pt;
+        padding: 6px;
+    }
+
+    div.user {
+        width: 100px;
+        position: relative;
+        margin-right: 10px;
+    }
+    .user div {
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        color: white;
+        font-size: 9px;
+        text-shadow: 1px 1px grey;
+    }
+
+    div.login {
+        width: 200px;
+        height: 250px;
+        border-radius: 8px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 24px;
+        padding:20px;
+        border: 1px solid grey;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        margin-bottom: 6px;
+        align-items: center;
+        box-shadow: 2px 2px 4px rgba(0, 0, 0, .5);
+    }
+
+    .share {
+        padding: 6px;
+
+    }
+    </style>
+</head>
+
+<body style="background-color: white; width:1000px;">
+
+
+
+
+
+
+    <div id=app>
+
+        <div v-if="state=='play'">
+            <div class=share>
+                <p>Deel deze link met medespelers via bv WhatsApp: </p><a id=link target="_" :href="link">{{link}}</a>
+            </div>
+
+            <div id="users" class=users>
+            </div>
+        </div>
+
+
+
+        <div class=login v-if="state=='login'">
+            <video autoplay :src-object.prop.camel=stream> </video>
+            <div>Uw Naam</div>
+            <input v-model="name" type=tel placeholder="naam ..."> 
+            <button :disabled="!id" v-on:click="play(name)">Play</button>
+        </div>
+    </div>
+
+    <svg  viewBox="-500 0 1000 1200" xmlns="http://www.w3.org/2000/svg">
+            <g id="board">
+            </g>
+    </svg>
+
+    <script>
+
+
+
+        var scene = new Scene("#board");
+ 
+        scene.add( new Sprite(40,500,918,918, "board", ["board.jpg", "unboard.jpg"], true));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","a1.png"]));
+        scene.add( new Sprite(-460,105,46,46,"tile", ["blank1.png","a2.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank2.png","a3.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank2.png","b1.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","c1.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","c1.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","d1.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank2.png","d2.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","d3.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","e1.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","e2.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank2.png","e3.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","f1.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","f2.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","g1.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","g2.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","g3.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank2.png","h1.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","h2.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","i1.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","i2.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","i3.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","j1.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","k1.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","l1.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","l2.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","l3.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","m1.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","m2.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","n1.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","n2.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","n3.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","o1.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","o2.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","o3.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","p1.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","p2.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","q1.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","r1.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","r2.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","r3.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","s1.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","s2.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","s3.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","t1.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","t2.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","t3.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","u1.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","u2.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","u3.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","v1.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","v2.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","w1.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","w2.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","x1.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","y1.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","y2.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank1.png","blank2.png"]));
+        scene.add( new Sprite(-480,100,46,46,"tile", ["blank2.png","blank1.png"]));
+
+        d3.shuffle(scene.sprites,1);
+    
+        var app = new Vue({
+          el: '#app',
+          data: {
+              name: "Guest",
+              state: "login",
+              master: false,
+              masterId: null,
+              host: "",
+              login: true,
+              stream: null,
+              id: null,
+              sync: null,
+              link: null
+          },
+          mounted: function() {
+            this.sync = new Sync(scene, id=> { this.id=id });
+            
+            scene.setAction(this.sync);
+
+            scene.stream
+                .then( stream => this.stream = stream );
+
+            
+            this.masterId = new URLSearchParams(window.location.search).get('t');
+
+            var lowx = -490;
+            var w = 50;
+            var lowy = 60;
+            var h = 900; 
+
+            scene.sprites.filter( s=> s.cls === 'tile').forEach( s=> {
+                var x = Math.floor( Math.random() * w) +lowx;
+                var y = Math.floor( Math.random() * h) +lowy;
+                s.x=x;
+                s.y=y;
+            });
+            scene.update();
+          },
+          methods: {
+              play: function (name) {
+                if ( this.masterId ) {
+                    this.sync.slave( this.masterId, name );
+                    this.link = window.location;
+                } else {
+                    var s = new URLSearchParams(window.location.search).toString();
+                    var h = window.location.toString();
+
+                    this.link = h.substring( 0, h.length-s.length) + "?t=" + this.id;
+                    this.sync.master( name);
+                }
+                this.state="play";
+              }
+          }
+        })
+
+
+
+
+    </script>
+</body>
+</html>
