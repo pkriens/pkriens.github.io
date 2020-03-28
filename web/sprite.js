@@ -175,11 +175,11 @@ class Scene {
 
         user.append("video")
              .attr("id", (d)=>"v-"+d.id)
-             .attr("muted", true)
+             .attr("controls", true)
              .attr("autoplay", true)
 
-        user.append("audio")
-             .attr("id", (d)=>"a-"+d.id);
+//         user.append("audio")
+//              .attr("id", (d)=>"a-"+d.id);
 
 
 //         users.selectAll("video").attr( "srcObject", (d)=> {
