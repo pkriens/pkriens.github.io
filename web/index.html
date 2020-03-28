@@ -114,7 +114,7 @@
 
 
         <div class=login v-if="state=='login'">
-            <video autoplay :src-object.prop.camel=stream> </video>
+            <video autoplay :src-object.prop.camel=stream muted="muted"> </video>
             <div>Uw Naam</div>
             <input v-model="name" type=tel placeholder="naam ..."> 
             <button :disabled="!id" v-on:click="play(name)">Play</button>

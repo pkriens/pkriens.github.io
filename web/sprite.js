@@ -77,7 +77,7 @@ class Scene {
         this.action = null;
         this.stream = navigator.mediaDevices.getUserMedia( { 
             video: { width: { max: 100}}, 
-            audio: { echoCancellation: true, autoGainControl:true, noiseSuppression:true } });
+            audio: true });
         this.stream.then( stream => console.log("local stream ok")).catch( err=> console.log("local stream err", err));
     }
 
@@ -175,6 +175,7 @@ class Scene {
 
         user.append("video")
              .attr("id", (d)=>"v-"+d.id)
+             .attr("muted", true)
              .attr("autoplay", true)
 
         user.append("audio")
