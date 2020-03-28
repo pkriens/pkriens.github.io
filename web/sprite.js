@@ -77,7 +77,7 @@ class Scene {
         this.action = null;
         this.stream = navigator.mediaDevices.getUserMedia( { 
             video: { width: { max: 100}}, 
-            audio: { echoCancellation: true } });
+            audio: { echoCancellation: true, autoGainControl:true, noiseSuppression:true } });
         this.stream.then( stream => console.log("local stream ok")).catch( err=> console.log("local stream err", err));
     }
 
