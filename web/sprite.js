@@ -75,7 +75,7 @@ class Scene {
         this.sprites = []
         this.owner = null;
         this.action = null;
-        this.stream = navigator.mediaDevices.getUserMedia( { video:true, audio:true });
+        this.stream = navigator.mediaDevices.getUserMedia( { video: { width: { max: 100}}, audio:true });
         this.stream.then( stream => console.log("local stream ok")).catch( err=> console.log("local stream err", err));
     }
 
@@ -95,6 +95,7 @@ class Scene {
 
     update() {
         var THIS = this;
+        var ox, oy;
         var sx, sy, contained = [], THIS = this;
 
         let sel = this.element.selectAll("image").data(this.sprites);
@@ -106,17 +107,16 @@ class Scene {
                 var state = (d.state + 1) % 2;
                 this.action.move(d.id,d.x,d.y,state,d.owner);
              })
+             .filter( d=> !d.container )
+            .attr("width", (s)=>s.w)
+            .attr("height", (s)=>s.h)
             .call(d3.drag().on("start", dragstarted).on("drag", dragged).on("end", dragended));
 
         function dragstarted(d) {
+            ox=d.x;
+            oy=d.y;
             let s = d3.select(this);
-            if (!d.container) {
-                s.raise();
-                contained = []
-            } else {
-                contained = THIS.sprites.filter(tile=>!tile.container && d.overlap(tile))
-                console.log(contained)
-            }
+            s.raise();
             sx = d3.event.x;
             sy = d3.event.y;
         }
@@ -131,26 +131,28 @@ class Scene {
             if ( THIS.owner && d.y+dy > 1000)
                 owner = THIS.owner;
 
-            THIS.action.move( d.id, d.x+dx, d.y+dy, d.state, owner);
-            contained.forEach(c=> THIS.action.move(c.id, c.x+dx, c.y+dy, c.state, null))
+            d.x += dx;
+            d.y += dy;
+            THIS.update();
+//            contained.forEach(c=> THIS.action.move(c.id, c.x+dx, c.y+dy, c.state, null))
         }
 
         function dragended(d) {
+            if ( d.x != ox && d.y != oy)
+                THIS.action.move(d.id,d.x,d.y,d.state,d.owner);
         }
 
         sel = this
             .element
             .selectAll("image")
                 .data(this.sprites)
-                .attr("x", (s)=>s.posx())
-                .attr("y", (s)=>s.posy())
-                .attr("width", (s)=>s.w)
-                .attr("height", (s)=>s.h)
                 .attr("href", (s)=>s.images[s.state])
                 .classed("hide", (s)=> {
                     var t = s.owner != null && s.owner != this.owner;
                     return t;
                 })
+                .attr("x", (s)=>s.posx())
+                .attr("y", (s)=>s.posy())
 
         var users = d3.select("#users")
             .selectAll(".user")
