@@ -5,7 +5,7 @@ class Shared {
 		this.app = app;
 		this.options = {
 			    debug:  0,
-			    host: "peerjs.aqute.biz",
+			    //host: "peerjs.aqute.biz",
 				//port: 9001,
 				//path: "/myapp",
 				//key: "peerjs"
