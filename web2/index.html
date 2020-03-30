@@ -1,0 +1,185 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Scrabble</title>
+<meta name="viewport" content="user-scalable=no, width=device-width">
+
+<script
+	src="https://cdn.jsdelivr.net/npm/peerjs@1.2.0/dist/peerjs.js"></script>
+<script src="https://unpkg.com/vue"></script>
+<script src="sync.js"></script>
+
+
+<style>
+body {
+	font-family: Verdana;
+	font-size: 0.9em;
+}
+
+.tile {
+	width: 40px;
+	height: 40px;
+	position: absolute;
+	background-color: white;
+}
+
+.board {
+	position: absolute;
+	background-color: red;
+	width: 918px;
+	height: 918px;
+}
+
+svg {
+	margin-left: auto;
+	margin-right: auto;
+	width: 1000px;
+	height: 1200px;
+}
+
+.hide {
+	visibility: hidden;
+}
+
+video {
+	width: 100px;
+	border-radius: 4px;
+	border: 1px solid grey;
+}
+
+div.users {
+	border-radius: 8px;
+	display: flex;
+	background-color: lightgrey;
+	width: 100%;
+	font-size: 9pt;
+	padding: 6px;
+}
+
+div.user {
+	width: 100px;
+	position: relative;
+	margin-right: 10px;
+}
+
+.user div {
+	position: absolute;
+	top: 3px;
+	left: 3px;
+	color: white;
+	font-size: 9px;
+	text-shadow: 1px 1px grey;
+}
+
+div.login {
+	width: 200px;
+	height: 250px;
+	border-radius: 8px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 24px;
+	padding: 20px;
+	border: 1px solid grey;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	margin-bottom: 6px;
+	align-items: center;
+	box-shadow: 2px 2px 4px rgba(0, 0, 0, .5);
+}
+
+.share {
+	padding: 6px;
+}
+</style>
+</head>
+
+<body style="background-color: white; width: 1000px;">
+
+	<div id=app>
+		<p>Peer {{id}}</p>
+		<p>Local stream {{stream ? stream.id : "X"}}</p>
+        <p>
+            Last Events
+            <div v-for="e in last">{{e}}</div>
+        <p>
+            Errors
+            <div v-for="e in errors">{{e}}</div>
+        <p>
+            Users {{streams.length}}
+            <div v-for="u in users">{{u.name}}{{u.local}}
+                <video autoplay :src-object.prop.camel="findStream(u.id)" :muted="u.local" :xmuted="u.local"> </video>
+            </div>
+        
+		<p v-if="!masterId">
+			MASTER
+			<div>
+				incoming
+				<div v-for="ic in ics">{{ic.peer}} {{ic.metadata.name}}</div>
+			</div>
+			<br />
+		<p>
+
+		<div v-if="masterId">
+		  SLAVE
+			<p>Master {{masterId}}</p>
+			<p>outgoing {{oc ? oc.toString() : "X"}}</p>
+		</div>
+	</div>
+
+	<script>
+        var app = new Vue({
+          el: '#app',
+          data: {
+              id: null,
+              name: "Guest",
+              streams: [],
+              masterId: null,
+              stream: null,
+              users: [],
+              ics: [],
+              oc: null,
+              last: [],
+              errors: [],
+              others: null
+          },
+          mounted: function() {
+              this.masterId = new URLSearchParams(window.location.search).get('t');
+              navigator.mediaDevices.getUserMedia( { 
+                video: { width: { max: 100}, height: { max: 100}}, audio:true}).then( s=> {
+                	this.stream = s;
+                    if ( this.masterId ) {
+                        this.others = new Slave(this,this.masterId);
+                        this.name = "slave";
+                    } else {
+                        this.others = new Master(this);
+                        this.name = "master";
+                    }
+                });
+            
+          },
+          methods: {
+        	  send: function(events) {
+        		  console.log(events);
+        		  this.last = events;
+        	  },
+        	  close: function() {
+        	  },
+        	  newUser: function (id,name, local) {
+        		  return { id, name, local};
+        	  },
+        	  findStream: function(id) {
+        		  var stream = this.streams.find( s => s.id == id);
+        		  if (stream) {
+        			   return stream.stream;
+        		  }
+        		  
+        		  return undefined;
+        	  }
+          }
+        });
+        
+    </script>
+</body>
+</html>

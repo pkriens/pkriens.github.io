@@ -1,6 +1,9 @@
 
 
+
 class Sync {
+
+    var foo = 3;
     
     constructor(scene,cb) {
       this.scene = scene;
@@ -8,12 +11,12 @@ class Sync {
       this.oc = null;
       this.options = {
         debug:  0,
-//        host: "15.236.70.217",
-//        port: 9001,
-//        path: "/myapp",
-//        key: "peerjs",
-//        secure: false
-//         ,
+       host: "15.236.70.217",
+       port: 9001,
+       path: "/myapp",
+       key: "peerjs",
+       secure: false
+        ,
          config: {'iceServers': [
               { url: 'turn:15.236.70.217:3478', username: "aQute", credential: "turn6754"},
               { url: 'stun:15.236.70.217:3478' , username: "aQute", credential: "turn6754"}
@@ -34,22 +37,18 @@ class Sync {
             console.log('slave:disconnect', err, " reconnecting");
             this.peer.reconnect();
         });
-    }
-
-    slave(masterId,name) {
+        
         this.peer.on('call', (call) => {
-            console.log("slave:incoming call", call,"fetch local stream");
-            this.scene.stream.then( local => {
-              console.log("slave:local stream found", local,"answer to caller");
-              call.answer(local);
-
+              console.log("slave:incoming call", call,"fetch local stream");
               call.on('stream', stream => {
                   console.log("slave:receive master stream", stream);
                   this.scene.users[call.peer].setStream(stream);
                   this.scene.update();
               });
-            });
         });
+    }
+
+    slave(masterId,name) {
 
         this.connect(masterId,name);
     }
