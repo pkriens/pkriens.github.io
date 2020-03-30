@@ -6,10 +6,10 @@ class Shared {
 		this.options = {
 			    debug:  0,
 			    host: "peerjs.aqute.biz",
-				port: 9001,
-				path: "/myapp",
-				key: "peerjs"
-				 ,
+				//port: 9001,
+				//path: "/myapp",
+				//key: "peerjs"
+				 //,
 				 config: {'iceServers': [
 				    { url: 'turn:peerjs.aqute.biz:3478', username: "aQute", credential: "turn6754"},
 				    { url: 'stun:peerjs.aqute.biz:3478', username: "aQute", credential: "turn6754"}
