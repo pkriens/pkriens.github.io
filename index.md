@@ -37,7 +37,7 @@ Therefore, if you want to build for the future, then I am sure we can make the d
 * [About aQute]
 * [About OSGi]
 * [Customers]
-* [Articles]
+* [Bndtools Forum]
 
 [Smalltalk]: https://en.wikipedia.org/wiki/Smalltalk
 [OO]: https://en.wikipedia.org/wiki/Object-oriented_programming
@@ -50,5 +50,6 @@ Therefore, if you want to build for the future, then I am sure we can make the d
 [Contact details]: contact
 [About aQute]: aqute
 [About OSGi]: osgi
+[Bndtools Forum]: https://bnd.discourse.group/
 [Articles]: posts
 [Customers]: customers
